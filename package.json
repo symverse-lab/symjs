@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "node_modules/mocha/bin/mocha $(find ./tests -name '*.spec.js') --recursive -w",
-    "lint": "eslint src/**/*.js"
+    "lint": "eslint src/**/*.js",
+    "build": "babel server --out-dir build --presets=es2015 && webpack"
   },
   "keywords": [
     "symverse",
