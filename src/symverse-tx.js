@@ -1,9 +1,9 @@
-import * as helper from './symverse-helper';
-const EthereumTx = require('ethereumjs-tx');
+var helper = require('./symverse-helper');
+var EthereumTx = require('ethereumjs-tx');
 var utils = require('web3-utils');
 
-class SymverseTx {
-    sign (params, pt) {
+var SymverseTx = function () {
+    function sign (params, pt) {
         params.value = helper.toWei(params.value);
         if (!params.hasOwnProperty('nonce')) {
             params.nonce = '0x00';
@@ -18,6 +18,9 @@ class SymverseTx {
         let serializedTx = tx.serialize();
         return '0x' + serializedTx.toString('hex');
     }
-}
+    return {
+        sign: sign
+    };
+};
 
-export default new SymverseTx();
+module.exports = SymverseTx();

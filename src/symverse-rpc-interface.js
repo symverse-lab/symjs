@@ -1,5 +1,5 @@
-import * as helper from './symverse-helper';
-import tx from './symverse-tx';
+var helper = require('./symverse-helper');
+var tx = require('./symverse-tx');
 
 const SymverseRpcInterface = function SymverseRpcInterface () {
     this.rpc = {};
@@ -59,4 +59,4 @@ const SymverseRpcInterface = function SymverseRpcInterface () {
     initRpc(arguments);
 };
 
-export default SymverseRpcInterface;
+module.exports = SymverseRpcInterface;

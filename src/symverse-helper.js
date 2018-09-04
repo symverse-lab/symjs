@@ -91,7 +91,7 @@ const toWei = (balance) => {
     return balance * Math.pow(10, 18);
 };
 
-export {
+module.exports = {
     isHex,
     appendHex,
     c10,
