@@ -1,23 +1,22 @@
 /* eslint-disable prefer-promise-reject-errors */
-import storage from 'electron-json-storage';
-import keythereum from 'keythereum';
-import aes256 from 'aes256';
-import md5 from 'blueimp-md5';
-import { machineId } from 'node-machine-id';
+var storage = require('electron-json-storage');
+var keythereum = require('keythereum');
+var aes256 = require('aes256');
+var md5 = require('blueimp-md5');
+var machineId = require('node-machine-id').machineId;
 
-let defaultKeystorePath = () => {
+var defaultKeystorePath = () => {
     return storage.getDefaultDataPath() + '/' + md5('keystore');
 };
 
-let _toArray = (value) => {
+var _toArray = (value) => {
     if (Array.isArray(value)) {
         return value;
     }
     return [value];
 };
 
-const SymverseKeystore = {
-
+var SymverseKeystore = {
     privateCreateOptions: { keyBytes: 32, ivBytes: 16 },
     keystoreCreateOptions: {
         kdf: 'scrypt',
@@ -341,4 +340,4 @@ const SymverseKeystore = {
     }
 };
 
-export default SymverseKeystore;
+module.exports = SymverseKeystore;

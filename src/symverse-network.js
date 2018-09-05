@@ -1,6 +1,6 @@
-import SymverseRpcInterface from './symverse-rpc-interface';
-const HttpProvider = require('ethjs-provider-http');
-const EthRPC = require('ethjs-rpc');
+var SymverseRpcInterface = require('./symverse-rpc-interface');
+var HttpProvider = require('ethjs-provider-http');
+var EthRPC = require('ethjs-rpc');
 
 const SymverseNetwork = (function () {
     let engine;
@@ -71,7 +71,7 @@ const SymverseNetwork = (function () {
             throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
         }
         return new Promise((resolve, reject) => {
-            rpc({method: 'web3_clientVersion'}).then((version) => {
+            rpc({ method: 'web3_clientVersion' }).then((version) => {
                 engineConnected = true;
                 resolve(message(true, version));
             }).catch(err => {
@@ -87,7 +87,7 @@ const SymverseNetwork = (function () {
         }
         return new Promise((resolve, reject) => {
             const retry = (n) => {
-                rpc({method: 'web3_clientVersion'}).then((version) => {
+                rpc({ method: 'web3_clientVersion' }).then((version) => {
                     engineConnected = true;
                     resolve(message(true, version));
                 }).catch(err => {
@@ -104,7 +104,7 @@ const SymverseNetwork = (function () {
     }
 
     function message (result, message) {
-        return {result, message};
+        return { result, message };
     }
 
     return {
@@ -116,4 +116,4 @@ const SymverseNetwork = (function () {
     };
 })();
 
-export default SymverseNetwork;
+module.exports = SymverseNetwork;
