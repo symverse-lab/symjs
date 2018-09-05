@@ -1,6 +1,6 @@
 # Symverse Wallet JavaScript API
 ###### It provides json rpc communication interface and development library with ethereum, symworld, local rpc.
-###### npm url path: [(https://www.npmjs.com/package/symjs)]
+###### npm url path: [https://www.npmjs.com/package/symjs]
 
 ## Installation
 #### Node.js
