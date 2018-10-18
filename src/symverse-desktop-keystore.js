@@ -22,7 +22,7 @@ var SymverseKeystore = {
         kdf: 'scrypt',
         cipher: 'aes-128-ctr',
         kdfparams: {
-            c: 262144,
+            c: 8192,
             dklen: 32,
             prf: 'hmac-sha256'
         }

@@ -1,6 +1,6 @@
 {
   "name": "symjs",
-  "version": "0.0.0-beta2",
+  "version": "0.0.0-beta3",
   "description": "symwallet network javascript api library",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,8 @@
   "keywords": [
     "symverse",
     "symwallet",
-    "symjs"
+    "symjs",
+    "blockchain"
   ],
   "babel": {
     "presets": [
@@ -18,7 +19,7 @@
     ]
   },
   "author": "symverse <itsinil@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "aes256": "^1.0.3",
     "bignumber.js": "4.0.0",

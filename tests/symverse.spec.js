@@ -11,7 +11,6 @@ describe('테스트', function () {
     });
 
     it('should return user array', () => {
-        const a = 200;
-        a.should.be.equal(200);
+        symjs.Symverse.tx
     });
 });
