@@ -25,7 +25,7 @@ describe('테스트', function () {
             "credit":"0x1",
             "role":"0x2",
             "org":"0x1",
-            "writetime":"2018-10-20T17:13:40Z"
+            "writetime":"1540342993"
         };
         let rlpData = symjs.Symverse.tx.citizenSign(params, pt);
         console.log(rlpData);
