@@ -91,8 +91,7 @@ var CitizenTransaction = function () {
             default: new Buffer([])
         }, {
             name: 'credit',
-            alias: 'input',
-            allowZero: true,
+            allowLess: true,
             default: new Buffer([])
         }, {
             name: 'role',
