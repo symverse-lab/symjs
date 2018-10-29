@@ -4,11 +4,8 @@ var EthRPC = require('ethjs-rpc');
 
 const SymverseNetwork = (function () {
     let engine;
-
     let engineConnected = false;
-
     const waitCount = 30;
-
     const by = new SymverseRpcInterface(rpc);
 
     // RPC 연결

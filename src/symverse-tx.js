@@ -1,9 +1,25 @@
 var helper = require('./symverse-helper');
 var SymverseCitizenTx = require('./symverse-citizen-tx');
-var EthereumTx = require('./symverse-transaction-tx');
+var SymverseTx = require('./symverse-transaction-tx');
+var EthereumTx = require('ethereumjs-tx');
 var utils = require('web3-utils');
 
-var SymverseTx = function () {
+var SymverseTran = function () {
+
+    function etherSign (params, pt) {
+        params.value = helper.toWei(params.value);
+        if (!params.hasOwnProperty('nonce')) {
+            params.nonce = '0x0';
+        }
+        for (let i in params) {
+            params[i] = utils.toHex(params[i]);
+        }
+        const tx = new EthereumTx(params);
+        const p = Buffer.from(pt, 'hex');
+        tx.sign(p);
+        let serializedTx = tx.serialize();
+        return '0x' + serializedTx.toString('hex');
+    }
 
     function sign (params, pt) {
         params.value = helper.toWei(params.value);
@@ -13,7 +29,7 @@ var SymverseTx = function () {
         for (let i in params) {
             params[i] = utils.toHex(params[i]);
         }
-        const tx = new EthereumTx(params);
+        const tx = new SymverseTx(params);
         const p = Buffer.from(pt, 'hex');
         tx.sign(p);
         let serializedTx = tx.serialize();
@@ -32,9 +48,10 @@ var SymverseTx = function () {
     }
 
     return {
+        etherSign,
         sign,
         citizenSign
     };
 };
 
-module.exports = SymverseTx();
+module.exports = SymverseTran();

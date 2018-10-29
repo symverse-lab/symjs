@@ -44,6 +44,12 @@ const SymverseRpcInterface = function SymverseRpcInterface () {
         ));
     };
 
+    this.sendEtherTransaction = (datas, pt) => {
+        return _this.rpc(payload(
+            'eth_sendRawTransaction', [tx.etherSign(datas, pt)]
+        ));
+    };
+
     this.getTransactionByHash = (tx) => {
         return _this.rpc(payload(
             'eth_getTransactionByHash', [tx]
