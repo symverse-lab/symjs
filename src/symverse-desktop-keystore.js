@@ -35,6 +35,8 @@ var SymverseKeystore = {
         KEYSTORE_CREATED: 'KEYSTORE_CREATED'
     },
 
+    pk: '',
+
     /**
      * keystore 생성
      * @param password string
@@ -45,8 +47,10 @@ var SymverseKeystore = {
     create (password, addData, listener) {
         return new Promise((res, rej) => {
             this.createPrivateKey(listener)
-                .then(dk => this.createKeystore(dk, password, listener))
-                .then(keystore => {
+                .then(dk => {
+
+                    return this.createKeystore(dk, password, listener);
+                }).then(keystore => {
                     if (typeof (addData) === 'object') keystore = Object.assign(keystore, addData);
                     return keystore;
                 }).then((keystore) => {
@@ -61,13 +65,14 @@ var SymverseKeystore = {
 
     /**
      * privateKey 생성
-     * @param importKeystore object|array
+     * @param createListener function
      * @return Promise
      */
     createPrivateKey (createListener) {
         const promise = new Promise((res, rej) => {
             keythereum.create(this.privateCreateOptions, (dk) => {
                 if (createListener) createListener(this.listener.PRIVATEKEY_CREATED);
+                this.pk = dk.privateKey;
                 res(dk);
             });
         });
@@ -78,7 +83,7 @@ var SymverseKeystore = {
      * keysotre 생성
      * @param dk object|array
      * @param password object|array
-     * @param password createListener
+     * @param createListener function
      * @return Promise
      */
     createKeystore (dk, password, createListener) {
