@@ -1,7 +1,7 @@
-var helper = require('./symverse-helper');
-var tx = require('./symverse-tx');
+var helper = require('../symverse-helper');
+var tx = require('../symverse-tx');
 
-const SymverseRpcInterface = function SymverseRpcInterface () {
+const SymverseRpcInterface = function  () {
     this.rpc = {};
     const _this = this;
     const defaultBlock = 'latest';
@@ -17,6 +17,7 @@ const SymverseRpcInterface = function SymverseRpcInterface () {
     const payload = (method, params) => {
         let output = { method };
         if (params) output.params = params;
+
         return output;
     };
 
@@ -28,37 +29,36 @@ const SymverseRpcInterface = function SymverseRpcInterface () {
 
     this.getBalance = (address) => {
         return _this.rpc(payload(
-            'eth_getBalance', [address, defaultBlock]
+            'sym_getBalance', [address, defaultBlock]
         ), helper.hexToNumberString);
     };
 
     this.getTransactionCount = (address) => {
         return _this.rpc(payload(
-            'eth_getTransactionCount', [address, defaultBlock]
+            'sym_getTransactionCount', [address, defaultBlock]
         ), helper.hexToNumberString);
     };
-
     this.sendTransaction = (datas, pt) => {
         return _this.rpc(payload(
-            'eth_sendRawTransaction', [tx.sign(datas, pt)]
+            'sym_sendRawTransaction', [tx.sign(datas, pt)]
         ));
     };
 
     this.sendEtherTransaction = (datas, pt) => {
         return _this.rpc(payload(
-            'eth_sendRawTransaction', [tx.etherSign(datas, pt)]
+            'sym_sendRawTransaction', [tx.etherSign(datas, pt)]
         ));
     };
 
     this.getTransactionByHash = (tx) => {
         return _this.rpc(payload(
-            'eth_getTransactionByHash', [tx]
+            'sym_getTransactionByHash', [tx]
         ));
     };
 
     this.getTransactionReceipt = (tx) => {
         return _this.rpc(payload(
-            'eth_getTransactionReceipt', [tx]
+            'sym_getTransactionReceipt', [tx]
         ));
     };
 

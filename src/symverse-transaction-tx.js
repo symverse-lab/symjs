@@ -58,8 +58,7 @@ var Transaction = function () {
             allowZero: true,
             length: 10,
             default: new Buffer([])
-        },
-        {
+        }, {
             name: 'nonce',
             length: 32,
             allowLess: true,

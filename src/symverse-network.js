@@ -1,12 +1,16 @@
-var SymverseRpcInterface = require('./symverse-rpc-interface');
+var SymverseRpcInterface = require('./rpcapi/symverse-rpc-interface');
+var ethereumRpcInterface = require('./rpcapi/ethereum-rpc-interface');
 var HttpProvider = require('ethjs-provider-http');
 var EthRPC = require('ethjs-rpc');
 
+
 const SymverseNetwork = (function () {
-    let engine;
+    let engine = {};
     let engineConnected = false;
     const waitCount = 30;
-    const by = new SymverseRpcInterface(rpc);
+
+    const eth = { by : new ethereumRpcInterface(rpc)};
+    const sym = { by : new SymverseRpcInterface(rpc)};
 
     // RPC 연결
     function connect (url) {
@@ -22,7 +26,7 @@ const SymverseNetwork = (function () {
 
     // rpc 기본 통신
     function rpc (payload, result) {
-        if (!hasEngin()) {
+        if (!hasEngine()) {
             throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
         }
         return new Promise((resolve, reject) => {
@@ -44,15 +48,15 @@ const SymverseNetwork = (function () {
         engine = new EthRPC(new HttpProvider(url));
     }
 
-    function hasEngin () {
-        if (engine) {
+    function hasEngine () {
+        if ( Object.keys(engine).length > 0) {
             return true;
         }
-        return true;
+        return false;
     }
 
     function hasConnected () {
-        if (engineConnected && hasEngin()) {
+        if (engineConnected && hasEngine()) {
             return true;
         }
         return true;
@@ -64,7 +68,7 @@ const SymverseNetwork = (function () {
 
     // RPC 연결 체크
     function httpRpcConnect () {
-        if (!hasEngin()) {
+        if (!hasEngine()) {
             throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
         }
         return new Promise((resolve, reject) => {
@@ -79,7 +83,7 @@ const SymverseNetwork = (function () {
 
     // RPC URL 연결 지속 체크
     function waithttpRpcConnect (listening) {
-        if (!hasEngin()) {
+        if (!hasEngine()) {
             throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
         }
         return new Promise((resolve, reject) => {
@@ -109,7 +113,8 @@ const SymverseNetwork = (function () {
         connectWait,
         hasConnected,
         rpc,
-        by
+        eth,
+        sym
     };
 })();
 
