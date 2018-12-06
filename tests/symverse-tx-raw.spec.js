@@ -52,23 +52,7 @@ describe('라이브러리 기능 체크', function () {
         let rlpData = symjs.Symverse.tx.citizenSign(params, pt);
         console.log("내꺼 인코딩", rlpData);
         console.log("내꺼 디코딩:", ethers.utils.RLP.decode(rlpData));
-        let ex = "0xf8848a000000000001c91d72008a000000000001c91d7200808a000000000001c91d720094bb2d9a64cc25014834faef09f0df9ca415ba8c910101800101845bda96a626a018bcfe200f1eba6b5f8b61ee8be3c7e43465946bcf883e93815154f79b72b020a07ef7ca64dfa1b2e4d86bbb288619780af40b4798cb0fe75345f5151fcc6de338"
-        let ex1 = [
-            '0x00000000000184c9de00',
-            '0x00000000000184c9de00',
-            '0x1',
-            '0x00000000000184c9de00',
-            '0x45e0f486346dddce7f25cad3aad7073783daf404',
-            '0x01',
-            '0x01',
-            '0x',
-            '0x01',
-            '0x01',
-            '0x0166cdcd5fc1',
-
-            '0x21',
-            '0x5ea918fb3506cb91a028e60a8ca4890f5ccf7e83ca2d6aa99f34f91ea911778a',
-            '0x3517b85bb56e2439725ab0d5c45e3f77a0043e3dfd07a437596104f750527148' ];
-        let encode = ethers.utils.RLP.encode(ex1);
+        let ex = "0xf87f8a3886784abcaf9f1be9808a3886784abcaf9f1be980808a3886784abcaf9f1be98094d360ef98ec6bd17623ab09d8310c9b62883076a101010101011ca0f7ea19c09e48642640bd469bb82b75349e7f5a12ec77eff3191d70fd14f90713a077425c72e24141c9998524edb7814b074cf925c0f437dc093d098d60944c9c46"
+        console.log("내꺼 디코딩!!:", ethers.utils.RLP.decode(ex));
     });
 });
