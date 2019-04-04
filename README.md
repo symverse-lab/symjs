@@ -13,6 +13,11 @@ npm i symjs
 yarn add symjs
 ```
 
+A minified, browserified file `dist/symjs.min.js` is included for use in the browser. Including this file simply attaches the `symjs` object to window:
+```$xslt
+<script src='dist/symjs.min.js'></script>
+```
+
 ## Usage
 Use the symjs object directly from the global namespace:
 ```javascript
@@ -21,9 +26,8 @@ console.log(symjs); // {Symverse: .., SymAccount: ...}
 ````
 Network connect(`ether`or `symworld` or `local rpc`)
 ```javascript
-var Symverse = require('symjs').Symverse;
-const symjs = new Symjs();
-symjs.network.connect(network.api).then(connectedMessage => {
+const sjs = new symjs();
+sjs.network.connect("http://localhost:8001").then(connectedMessage => {
     console.log(connectedMessage, 'connect success...')
 }).catch(e => {
     // connected fail...
@@ -33,18 +37,18 @@ symjs.network.connect(network.api).then(connectedMessage => {
 There you go, now you can use it:
 ```javascript
 // Return Promise Object By Json RPC   
-symjs.network.call.getBalance(address); 
-symjs.network.call.clientVersion();
-symjs.network.call.sendTransaction(datas, pk);
+sjs.network.call.getBalance(address); 
+sjs.network.call.clientVersion();
+sjs.network.call.sendTransaction(datas, pk);
 ```
 
 #### Keystore Create and unlock
 ```javascript
 // Return Promise Object
-const keystore = await Symjs.keystore.create("1234")
+const keystore = await symjs.keystore.create("1234")
 
 // Return Promise Object ( privateKey )
-const pk = await Symjs.keystore.unlock({...keystoreObject}, "1234")
+const pk = await symjs.keystore.unlock({...keystoreObject}, "1234")
 ```
 
 #### Eslint
