@@ -1,10 +1,31 @@
 {
-    "root": true,
-    "extends": ["standard"],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "standard"
+    ],
     "rules": {
+        "no-useless-constructor": 0,
+        "no-new": 0,
+        "standard/no-callback-literal": 0,
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1
+            }
         ],
         "linebreak-style": [
             "error",
@@ -14,13 +35,12 @@
             "error",
             "single",
             {
-                "allowTemplateLiterals": true
+                "avoidEscape": true
             }
         ],
         "semi": [
             "error",
             "always"
-        ],
-        "promise/param-names": 0
+        ]
     }
 }

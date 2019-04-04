@@ -1,28 +1,23 @@
 /**
  * rpc.spec.js
  */
+
 const should = require('should');
-const symjs =  require ('../index.js');
+const Symjs =  require ('../index.js');
 
-const Symverse = symjs.Symverse;
+describe("RPC API Call", function () {
+    const symjs = new Symjs();
+    const tempPk = "e72b3b417632c71c22579a7cb255c5fddbb3cc9f05a8d253ed7582ad5ed947ba";
 
-describe('라이브러리 기능 체크', function () {
-    it(' RPC 기본 통신', () => {
-        Symverse.network.connect("http://13.209.136.11:8001").then(function(result){
-            console.log(result,"연결")
-        }).catch(function(err) {
-            console.log(err, "에러")
-        })
-        Symverse.network.sym.by.clientVersion().then((version) => {
-            console.log("노드 체크", version);
-        }).catch(e =>{
-        });
-
-        const rpc = Symverse.network.eth.by;
-
-        rpc.clientVersion().then((version) => {
-            console.log("노드 체크", version);
-        }).catch(e =>{
-        });
+    it(' RPC connect', async () => {
+        await symjs.network.connect("http://localhost:8001")
+        var result = await symjs.network.call.warrant.getWarrantBlockByNumber("0x2", true)
     });
+
+    it(' Sct20 create', async () => {
+        await symjs.network.connect("http://localhost:8001")
+        const constract = await symjs.network.call.sct.getContract("0x4523ad7875a9c41e9629")
+        console.log(constract)
+    });
+
 });

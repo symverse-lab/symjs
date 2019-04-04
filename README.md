@@ -10,7 +10,7 @@ npm i symjs
 
 #### Yarn
 ```javascript
-npm i symjs
+yarn add symjs
 ```
 
 ## Usage
@@ -22,7 +22,8 @@ console.log(symjs); // {Symverse: .., SymAccount: ...}
 Network connect(`ether`or `symworld` or `local rpc`)
 ```javascript
 var Symverse = require('symjs').Symverse;
-Symverse.network.connect(network.api).then(connectedMessage => {
+const symjs = new Symjs();
+symjs.network.connect(network.api).then(connectedMessage => {
     console.log(connectedMessage, 'connect success...')
 }).catch(e => {
     // connected fail...
@@ -32,9 +33,18 @@ Symverse.network.connect(network.api).then(connectedMessage => {
 There you go, now you can use it:
 ```javascript
 // Return Promise Object By Json RPC   
-Symverse.network.by.getBalance(address); 
-Symverse.network.by.clientVersion();
-Symverse.network.by.sendTransaction(datas, pk);
+symjs.network.call.getBalance(address); 
+symjs.network.call.clientVersion();
+symjs.network.call.sendTransaction(datas, pk);
+```
+
+#### Keystore Create and unlock
+```javascript
+// Return Promise Object
+const keystore = await Symjs.keystore.create("1234")
+
+// Return Promise Object ( privateKey )
+const pk = await Symjs.keystore.unlock({...keystoreObject}, "1234")
 ```
 
 #### Eslint

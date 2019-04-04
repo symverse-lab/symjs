@@ -1,7 +1,7 @@
-var helper = require('../symverse-helper');
-var tx = require('../symverse-tx');
+var helper = require('../helper');
+var tx = require('../signer');
 
-const SymverseRpcInterface = function  () {
+const EthMethods = function () {
     this.rpc = {};
     const _this = this;
     const defaultBlock = 'latest';
@@ -17,7 +17,6 @@ const SymverseRpcInterface = function  () {
     const payload = (method, params) => {
         let output = { method };
         if (params) output.params = params;
-
         return output;
     };
 
@@ -29,40 +28,41 @@ const SymverseRpcInterface = function  () {
 
     this.getBalance = (address) => {
         return _this.rpc(payload(
-            'sym_getBalance', [address, defaultBlock]
+            'eth_getBalance', [address, defaultBlock]
         ), helper.hexToNumberString);
     };
 
     this.getTransactionCount = (address) => {
         return _this.rpc(payload(
-            'sym_getTransactionCount', [address, defaultBlock]
+            'eth_getTransactionCount', [address, defaultBlock]
         ), helper.hexToNumberString);
     };
+
     this.sendTransaction = (datas, pt) => {
         return _this.rpc(payload(
-            'sym_sendRawTransaction', [tx.sign(datas, pt)]
+            'eth_sendRawTransaction', [tx.sign(datas, pt)]
         ));
     };
 
     this.sendEtherTransaction = (datas, pt) => {
         return _this.rpc(payload(
-            'sym_sendRawTransaction', [tx.etherSign(datas, pt)]
+            'eth_sendRawTransaction', [tx.etherSign(datas, pt)]
         ));
     };
 
     this.getTransactionByHash = (tx) => {
         return _this.rpc(payload(
-            'sym_getTransactionByHash', [tx]
+            'eth_getTransactionByHash', [tx]
         ));
     };
 
     this.getTransactionReceipt = (tx) => {
         return _this.rpc(payload(
-            'sym_getTransactionReceipt', [tx]
+            'eth_getTransactionReceipt', [tx]
         ));
     };
 
     initRpc(arguments);
 };
 
-module.exports = SymverseRpcInterface;
+module.exports = EthMethods;

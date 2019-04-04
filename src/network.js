@@ -1,16 +1,14 @@
-var SymverseRpcInterface = require('./rpcapi/symverse-rpc-interface');
-var ethereumRpcInterface = require('./rpcapi/ethereum-rpc-interface');
+var SymMethod = require('./rpcapi/sym-methods');
 var HttpProvider = require('ethjs-provider-http');
 var EthRPC = require('ethjs-rpc');
 
+const notConnectedError = 'connect() 함수를 통해 rpc 연결을 확인해 주시기 바랍니다.'
 
-const SymverseNetwork = (function () {
+const Network = (function () {
     let engine = {};
     let engineConnected = false;
     const waitCount = 30;
-
-    const eth = { by : new ethereumRpcInterface(rpc)};
-    const sym = { by : new SymverseRpcInterface(rpc)};
+    const call = new SymMethod(rpc);
 
     // RPC 연결
     function connect (url) {
@@ -27,7 +25,7 @@ const SymverseNetwork = (function () {
     // rpc 기본 통신
     function rpc (payload, result) {
         if (!hasEngine()) {
-            throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
+            throw new Error(notConnectedError);
         }
         return new Promise((resolve, reject) => {
             engine.sendAsync(payload, (e, output) => {
@@ -49,7 +47,7 @@ const SymverseNetwork = (function () {
     }
 
     function hasEngine () {
-        if ( Object.keys(engine).length > 0) {
+        if (Object.keys(engine).length > 0) {
             return true;
         }
         return false;
@@ -69,7 +67,7 @@ const SymverseNetwork = (function () {
     // RPC 연결 체크
     function httpRpcConnect () {
         if (!hasEngine()) {
-            throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
+            throw new Error(notConnectedError);
         }
         return new Promise((resolve, reject) => {
             rpc({ method: 'web3_clientVersion' }).then((version) => {
@@ -84,7 +82,7 @@ const SymverseNetwork = (function () {
     // RPC URL 연결 지속 체크
     function waithttpRpcConnect (listening) {
         if (!hasEngine()) {
-            throw new Error(`setHttpProvider를 통해 연결할 url 를 등록해주시기 바랍니다.`);
+            throw new Error(notConnectedError);
         }
         return new Promise((resolve, reject) => {
             const retry = (n) => {
@@ -113,9 +111,8 @@ const SymverseNetwork = (function () {
         connectWait,
         hasConnected,
         rpc,
-        eth,
-        sym
+        call
     };
 })();
 
-module.exports = SymverseNetwork;
+module.exports = Network;

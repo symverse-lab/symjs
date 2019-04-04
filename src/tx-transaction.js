@@ -1,6 +1,8 @@
 'use strict';
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var helper = require('./helper');
+
+function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var ethUtil = require('ethereumjs-util');
 var fees = require('ethereum-common/params.json');
@@ -34,97 +36,89 @@ var N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f4668
  * For Object and Arrays each of the elements can either be a Buffer, a hex-prefixed (0x) String , Number, or an object with a toBuffer method such as Bignum
  *
  * @property {Buffer} raw The raw rlp encoded transaction
- * @param {Buffer} data.from nonce number
- * @param {Buffer} data.to transaction gas limit
- * @param {Buffer} data.nonce transaction gas price
- * @param {Buffer} data.symid to the to address
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
+ * @param {Buffer} data.from from number
+ * @param {Buffer} data.nonce nonce number
+ * @param {Buffer} data.gasLimit transaction gas limit
+ * @param {Buffer} data.gasPrice transaction gas price
+ * @param {Buffer} data.to to the to address
+ * @param {Buffer} data.value the amount of ether sent
+ * @param {Buffer} data.src src template
+ * @param {Buffer} data.data this will contain the data of the message or the init of a contract
  * @param {Buffer} data.v EC signature parameter
  * @param {Buffer} data.r EC signature parameter
  * @param {Buffer} data.s EC recovery ID
  * @param {Number} data.chainId EIP 155 chainId - mainnet: 1, ropsten: 3
  * */
 
-var CitizenTransaction = function () {
-    function CitizenTransaction(data) {
-        _classCallCheck(this, CitizenTransaction);
+var Transaction = (function () {
+    function Transaction (data) {
+        _classCallCheck(this, Transaction);
+
         data = data || {};
-        var fields = [{
-            name: 'from',
-            //length: 10,
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 'to',
-            //length: 10,
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 'nonce',
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 'symid',
-            allowZero: true,
-            //length: 10,
-            default: new Buffer([])
-        }, {
-            name: 'pubkeyhash',
-            //length: 20,
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 'country',
-            alias: 'input',
-            allowZero: true,
-            default: new Buffer([])
-        }, {
-            name: 'status',
-            alias: 'input',
-            allowZero: true,
-            default: new Buffer([])
-        }, {
-            name: 'credit',
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 'role',
-            alias: 'input',
-            allowZero: true,
-            default: new Buffer([])
-        }, {
-            name: 'org',
-            alias: 'input',
-            allowZero: true,
-            default: new Buffer([])
-        }, {
-            name: 'writetime',
-            alias: 'input',
-            allowZero: true,
-            default: new Buffer([])
-        }, {
-            name: 'v',
-            allowZero: true,
-            default: new Buffer([0x1c])
-        }, {
-            name: 'r',
-            length: 32,
-            allowZero: true,
-            allowLess: true,
-            default: new Buffer([])
-        }, {
-            name: 's',
-            length: 32,
-            allowZero: true,
-            allowLess: true,
-            default: new Buffer([])
-        }];
+        // Define Properties
+        var fields = [
+            {
+                name: 'from',
+                allowZero: true,
+                length: 10,
+                default: Buffer.from([])
+            }, {
+                name: 'nonce',
+                length: 32,
+                allowLess: true,
+                default: Buffer.from([])
+            }, {
+                name: 'gasPrice',
+                length: 32,
+                allowLess: true,
+                default: Buffer.from([])
+            }, {
+                name: 'gasLimit',
+                alias: 'gas',
+                length: 32,
+                allowLess: true,
+                default: Buffer.from([])
+            }, {
+                name: 'to',
+                allowZero: true,
+                length: 10,
+                default: Buffer.from([])
+            }, {
+                name: 'value',
+                length: 32,
+                allowLess: true,
+                default: Buffer.from([])
+            }, {
+                name: 'data',
+                alias: 'input',
+                allowZero: true,
+                default: Buffer.from([])
+            }, {
+                name: 'sct',
+                allowLess: true,
+                allowZero: true,
+                length: 1,
+                default: Buffer.from([false])
+            }, {
+                name: 'workNodes',
+                default: Buffer.from([])
+            }, {
+                name: 'v',
+                allowZero: false,
+                default: Buffer.from([0x00])
+            }, {
+                name: 'r',
+                length: 32,
+                allowZero: true,
+                allowLess: true,
+                default: Buffer.from([])
+            }, {
+                name: 's',
+                length: 32,
+                allowZero: true,
+                allowLess: true,
+                default: Buffer.from([])
+            }];
 
         /**
          * Returns the rlp encoding of the transaction
@@ -134,7 +128,7 @@ var CitizenTransaction = function () {
          * @name serialize
          */
         // attached serialize
-        ethUtil.defineProperties(this, fields, data);
+        helper.defineProperties(this, fields, data);
 
         /**
          * @property {Buffer} from (read only) sender address of this transaction, mathematically derived from other parameters.
@@ -149,9 +143,8 @@ var CitizenTransaction = function () {
 
         // calculate chainId from signature
         var sigV = ethUtil.bufferToInt(this.v);
-        var chainId = Math.floor((sigV - 35) / 2);
+        var chainId = sigV;
         if (chainId < 0) chainId = 0;
-
         // set chainId
         this._chainId = chainId || data.chainId || 0;
         this._homestead = true;
@@ -162,8 +155,7 @@ var CitizenTransaction = function () {
      * @return {Boolean}
      */
 
-
-    CitizenTransaction.prototype.toCreationAddress = function toCreationAddress() {
+    Transaction.prototype.toCreationAddress = function toCreationAddress () {
         return this.to.toString('hex') === '';
     };
 
@@ -173,14 +165,8 @@ var CitizenTransaction = function () {
      * @return {Buffer}
      */
 
-
-    CitizenTransaction.prototype.hash = function hash(includeSignature) {
+    Transaction.prototype.hash = function hash (includeSignature) {
         if (includeSignature === undefined) includeSignature = true;
-
-        // EIP155 spec:
-        // when computing the hash of a transaction for purposes of signing or recovering,
-        // instead of hashing only the first six elements (ie. nonce, gasprice, startgas, to, value, data),
-        // hash nine elements, with v replaced by CHAIN_ID, r = 0 and s = 0
 
         var items = void 0;
         if (includeSignature) {
@@ -197,9 +183,8 @@ var CitizenTransaction = function () {
                 items = this.raw.slice(0, 6);
             }
         }
-
         // create hash
-        return ethUtil.rlphash(items);
+        return helper.rlphash(items);
     };
 
     /**
@@ -207,8 +192,7 @@ var CitizenTransaction = function () {
      * @return {Buffer}
      */
 
-
-    CitizenTransaction.prototype.getChainId = function getChainId() {
+    Transaction.prototype.getChainId = function getChainId () {
         return this._chainId;
     };
 
@@ -217,13 +201,12 @@ var CitizenTransaction = function () {
      * @return {Buffer}
      */
 
-
-    CitizenTransaction.prototype.getSenderAddress = function getSenderAddress() {
+    Transaction.prototype.getSenderAddress = function getSenderAddress () {
         if (this._from) {
             return this._from;
         }
         var pubkey = this.getSenderPublicKey();
-        this._from = ethUtil.publicToAddress(pubkey);
+        this._from = helper.publicToAddress(pubkey);
         return this._from;
     };
 
@@ -232,8 +215,7 @@ var CitizenTransaction = function () {
      * @return {Buffer}
      */
 
-
-    CitizenTransaction.prototype.getSenderPublicKey = function getSenderPublicKey() {
+    Transaction.prototype.getSenderPublicKey = function getSenderPublicKey () {
         if (!this._senderPubKey || !this._senderPubKey.length) {
             if (!this.verifySignature()) throw new Error('Invalid Signature');
         }
@@ -245,24 +227,19 @@ var CitizenTransaction = function () {
      * @return {Boolean}
      */
 
-
-    CitizenTransaction.prototype.verifySignature = function verifySignature() {
+    Transaction.prototype.verifySignature = function verifySignature () {
         var msgHash = this.hash(false);
+
         // All transaction signatures whose s-value is greater than secp256k1n/2 are considered invalid.
         if (this._homestead && new BN(this.s).cmp(N_DIV_2) === 1) {
             return false;
         }
-
         try {
             var v = ethUtil.bufferToInt(this.v);
-            if (this._chainId > 0) {
-                v -= this._chainId * 2 + 8;
-            }
             this._senderPubKey = ethUtil.ecrecover(msgHash, v, this.r, this.s);
         } catch (e) {
             return false;
         }
-
         return !!this._senderPubKey;
     };
 
@@ -271,13 +248,10 @@ var CitizenTransaction = function () {
      * @param {Buffer} privateKey
      */
 
-
-    CitizenTransaction.prototype.sign = function sign(privateKey) {
+    Transaction.prototype.sign = function sign (privateKey) {
         var msgHash = this.hash(false);
         var sig = ethUtil.ecsign(msgHash, privateKey);
-        if (this._chainId > 0) {
-            sig.v += this._chainId * 2 + 8;
-        }
+        sig.v = sig.v - 27;
         Object.assign(this, sig);
     };
 
@@ -286,8 +260,7 @@ var CitizenTransaction = function () {
      * @return {BN}
      */
 
-
-    CitizenTransaction.prototype.getDataFee = function getDataFee() {
+    Transaction.prototype.getDataFee = function getDataFee () {
         var data = this.raw[5];
         var cost = new BN(0);
         for (var i = 0; i < data.length; i++) {
@@ -301,8 +274,7 @@ var CitizenTransaction = function () {
      * @return {BN}
      */
 
-
-    CitizenTransaction.prototype.getBaseFee = function getBaseFee() {
+    Transaction.prototype.getBaseFee = function getBaseFee () {
         var fee = this.getDataFee().iaddn(fees.txGas.v);
         if (this._homestead && this.toCreationAddress()) {
             fee.iaddn(fees.txCreation.v);
@@ -315,8 +287,7 @@ var CitizenTransaction = function () {
      * @return {BN}
      */
 
-
-    CitizenTransaction.prototype.getUpfrontCost = function getUpfrontCost() {
+    Transaction.prototype.getUpfrontCost = function getUpfrontCost () {
         return new BN(this.gasLimit).imul(new BN(this.gasPrice)).iadd(new BN(this.value));
     };
 
@@ -326,8 +297,7 @@ var CitizenTransaction = function () {
      * @return {Boolean|String}
      */
 
-
-    CitizenTransaction.prototype.validate = function validate(stringError) {
+    Transaction.prototype.validate = function validate (stringError) {
         var errors = [];
         if (!this.verifySignature()) {
             errors.push('Invalid Signature');
@@ -344,7 +314,7 @@ var CitizenTransaction = function () {
         }
     };
 
-    return CitizenTransaction;
-}();
+    return Transaction;
+}());
 
-module.exports = CitizenTransaction;
+module.exports = Transaction;

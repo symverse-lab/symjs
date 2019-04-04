@@ -1,18 +1,13 @@
-var SymNetwork = require('./src/symverse-network');
-var SymHelper = require('./src/symverse-helper');
-var SymTx = require('./src/symverse-tx');
-var utils = require('web3-utils');
-var SymDesktopKeystore = require('./src/symverse-desktop-keystore');
+var SymNetwork = require('./src/network');
+var SymHelper = require('./src/helper');
+var SymTx = require('./src/signer');
+//var Keystore = require('./src/keystore/keystore');
 
 var Symjs = function () {
-    this.version = '0.0.0-beta3';
     this.network = SymNetwork;
     this.utils = SymHelper;
-    this.etherUtils = utils;
-    this.tx = SymTx;
+    this.sigenr = SymTx;
+    //this.keystore = Keystore;
 };
 
-module.exports = {
-    Symverse: new Symjs(),
-    SymAccount: SymDesktopKeystore
-};
+module.exports = Symjs;
