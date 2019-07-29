@@ -58,7 +58,6 @@ describe('계약 기능 체크', function () {
     });
 
     it('Tx Raw decode', () => {
-        console.log(helper.sha3("hi()").toString('hex').slice(0,10))
     });
 
 });

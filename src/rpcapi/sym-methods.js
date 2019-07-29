@@ -191,11 +191,6 @@ const SymMethods = function () {
 
     this.sct = {
         params: SctParams,
-        send: (csymid) => {
-            return _this.rpc(payload(
-                'sct_getContract', [csymid, defaultBlock]
-            ));
-        },
         getContract: (csymid) => {
             return _this.rpc(payload(
                 'sct_getContract', [csymid, defaultBlock]

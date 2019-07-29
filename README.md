@@ -42,6 +42,13 @@ sjs.network.call.clientVersion();
 sjs.network.call.sendTransaction(datas, pk);
 ```
 
+sct api call:
+```javascript
+// Return Promise Object By Json RPC   
+let constract = await sjs.network.call.sct.getContract("0x4523ad7875a9c41e9629")
+let account = await sjs.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x4523ad7875a9c41e9629")
+```
+
 #### Keystore Create and unlock
 ```javascript
 // Return Promise Object
