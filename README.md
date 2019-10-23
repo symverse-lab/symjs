@@ -13,9 +13,9 @@ npm i symjs
 yarn add symjs
 ```
 
-A minified, browserified file `dist/symjs.min.js` is included for use in the browser. Including this file simply attaches the `symjs` object to window:
+A minified, browserified file `dist/symjs.js` is included for use in the browser. Including this file simply attaches the `symjs` object to window:
 ```$xslt
-<script src='dist/symjs.min.js'></script>
+<script src='dist/symjs.js'></script>
 ```
 
 ## Usage
