@@ -1,4 +1,4 @@
-var helper = require('../../helper');
+let helper = require('../../helper');
 
 function SctFormat (type, method, params) {
     this.type = type;
@@ -11,8 +11,8 @@ SctFormat.prototype.raw = function () {
     return helper.encodeRlp(sct).toString('hex');
 };
 
-var sct40 = (function () {
-    var type = 2;
+let sct40 = (function () {
+    let type = 2;
 
     return {
         create: function (name, symbol, totalSupply, ownerSymId) {
@@ -45,4 +45,4 @@ var sct40 = (function () {
     };
 })();
 
-module.exports = sct40
+module.exports = sct40;

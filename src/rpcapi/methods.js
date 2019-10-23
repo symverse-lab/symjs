@@ -1,8 +1,8 @@
-var helper = require('../helper');
-var tx = require('../signer');
-var SctParams = require('./sct')
+let helper = require('../helper');
+let tx = require('../signer');
+let SctParams = require('./sct');
 
-const SymMethods = function () {
+const Methods = function () {
     this.rpc = {};
     const _this = this;
     const defaultBlock = 'latest';
@@ -22,39 +22,37 @@ const SymMethods = function () {
         return output;
     };
     // ============== web3 ============== //
-
     this.clientVersion = () => {
         return _this.rpc(payload(
             'web3_clientVersion'
         ));
     };
     // ============== sym ============== //
-
     this.getBalance = (address) => {
         return _this.rpc(payload(
             'sym_getBalance', [address, defaultBlock]
         ), helper.hexToNumberString);
-    },
+    };
     this.accounts = () => {
         return _this.rpc(payload(
             'sym_accounts'
         ));
-    },
+    };
     this.getTransactionCount = (address) => {
         return _this.rpc(payload(
             'sym_getTransactionCount', [address, defaultBlock]
         ), helper.hexToNumberString);
-    },
+    };
     this.getTransactionByHash = (tx) => {
         return _this.rpc(payload(
             'sym_getTransactionByHash', [tx]
         ));
-    },
+    };
     this.getTransactionReceipt = (tx) => {
         return _this.rpc(payload(
             'sym_getTransactionReceipt', [tx]
         ));
-    },
+    };
     this.sendTransaction = (datas, pt) => {
         return _this.rpc(payload(
             'sym_sendRawTransaction', [tx.sign(datas, pt)]
@@ -64,127 +62,70 @@ const SymMethods = function () {
     this.citizen = {
         sendCitizen: (datas, pt) => {
             return _this.rpc(payload(
-                'sym_sendRawCitizen', [tx.citizenSign(datas, pt)]
+                'citizen_sendRawCitizen', [tx.citizenSign(datas, pt)]
             ));
         },
         getCitizenByHash: (tx) => {
             return _this.rpc(payload(
-                'sym_getCitizenByHash', [tx]
+                'citizen_getCitizenByHash', [tx]
             ));
         },
         getRawCitizenByHash: (tx) => {
             return _this.rpc(payload(
-                'sym_getRawCitizenByHash', [tx]
+                'citizen_getRawCitizenByHash', [tx]
             ));
         },
         getCitizenBySymID: (symId) => {
             return _this.rpc(payload(
-                'sym_getCitizenBySymID', [symId]
+                'citizen_getCitizenBySymID', [symId, defaultBlock]
             ));
         },
         getRawCitizenBySymID: (symId) => {
             return _this.rpc(payload(
-                'sym_getRawCitizenBySymID', [symId]
+                'citizen_getRawCitizenBySymID', [symId, defaultBlock]
             ));
         },
-        getCitizens: () => {
+        getCitizenCount: () => {
             return _this.rpc(payload(
-                'sym_getCitizens', []
-            ));
-        },
-        getCitizenStatus: (symId) => {
-            return _this.rpc(payload(
-                'sym_getCitizenStatus', [symId]
-            ));
-        },
-        getCitizenCountFromPool: () => {
-            return _this.rpc(payload(
-                'sym_getCitizenCountFromPool', []
-            ));
-        },
-        getCitizenCountFromDb: () => {
-            return _this.rpc(payload(
-                'sym_getCitizenCountFromDb', []
+                'citizen_getCitizenCount', []
             ));
         },
         pendingCitizens: () => {
             return _this.rpc(payload(
-                'sym_pendingCitizens', []
+                'citizen_pendingCitizens', []
             ));
         },
-        citizenBlockNumber: () => {
+        blockNumber: () => {
             return _this.rpc(payload(
-                'sym_citizenBlockNumber', []
+                'citizen_blockNumber', []
             ));
         },
-        getCitizenBlockByNumber: (number, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'sym_getCitizenBlockByNumber', [number, isFull]
-            ));
-        },
-        getCitizenBlockByHash: (hash, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'sym_getCitizenBlockByHash', [hash, isFull]
-            ));
-        },
-        getIssuer: (symId) => {
-            return _this.rpc(payload(
-                'sym_getIssuer', [symId]
-            ));
-        },
-        getCitizenRole: (symId) => {
-            return _this.rpc(payload(
-                'sym_getCitizenRole', [symId]
-            ));
-        }
+        // getBlock: (number, isFull) => {
+        //     if (typeof isFull === 'undefined') {
+        //         isFull = false;
+        //     }
+        //     return _this.rpc(payload(
+        //         'citizen_getBlock', [number, isFull]
+        //     ));
+        // },
     };
 
     // ============== warrant ============== //
 
     this.warrant = {
-        warrantBlockNumber: () => {
+        blockNumber: () => {
             return _this.rpc(payload(
-                'warrant_warrantBlockNumber', []
+                'warrant_blockNumber', []
             ));
         },
-        getWarrantBlockByHash: (hash, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'warrant_getWarrantBlockByHash', [hash, isFull]
-            ));
-        },
-        getWarrantBlockByNumber: (number, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'warrant_getWarrantBlockByNumber', [number, isFull]
-            ));
-        },
-        getWarrantsByBlockHash: (hash, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'warrant_getWarrantsByBlockHash', [hash, isFull]
-            ));
-        },
-        getWarrantsByBlockNumber: (number, isFull) => {
-            if (typeof isFull === 'undefined') {
-                isFull = true;
-            }
-            return _this.rpc(payload(
-                'warrant_getWarrantsByBlockNumber', [number, isFull]
-            ));
-        }
+        // getBlock: (number, isFull) => {
+        //     if (typeof isFull === 'undefined') {
+        //         isFull = true;
+        //     }
+        //     return _this.rpc(payload(
+        //         'warrant_getBlock', [number, isFull]
+        //     ));
+        // },
     };
 
     // ============== sct ============== //
@@ -220,4 +161,4 @@ const SymMethods = function () {
     initRpc(arguments);
 };
 
-module.exports = SymMethods;
+module.exports = Methods;

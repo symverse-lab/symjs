@@ -42,8 +42,8 @@ const stringToHex = (value) => {
     if (!value || isHex(value)) {
         return value;
     }
-    var hex = '';
-    for (var i = 0; i < value.length; i++) {
+    let hex = '';
+    for (let i = 0; i < value.length; i++) {
         hex += '' + value.charCodeAt(i).toString(16);
     }
     return '0x' + hex;
@@ -162,7 +162,7 @@ const defineProperties = (self, fields, data) => {
     // attach the `toJSON`
     self.toJSON = function (label) {
         if (label) {
-            var obj = {};
+            let obj = {};
             self._fields.forEach(function (field) {
                 obj[field] = '0x' + self[field].toString('hex');
             });
@@ -235,7 +235,7 @@ const defineProperties = (self, fields, data) => {
                 self[self._fields[i]] = ethUtil.toBuffer(d);
             });
         } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
-            var keys = Object.keys(data);
+            let keys = Object.keys(data);
             fields.forEach(function (field) {
                 if (keys.indexOf(field.name) !== -1) self[field.name] = data[field.name];
                 if (keys.indexOf(field.alias) !== -1) self[field.alias] = data[field.alias];

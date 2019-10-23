@@ -2,11 +2,11 @@
  * users.spec.js
  */
 const should = require('should');
-const Symjs =  require ('../index.js');
+const SymJs =  require ('../index.js');
 const helper = require('../src/helper');
 
 describe('계약 기능 체크', function () {
-    const symjs = new Symjs();
+    const symjs = new SymJs();
     it('Contract', () => {
         let abi = [
             {

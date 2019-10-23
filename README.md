@@ -1,6 +1,6 @@
 # Symverse Wallet JavaScript API
-###### It provides json rpc communication interface and development library with ethereum, symworld, local rpc.
-###### npm url path: [https://www.npmjs.com/package/symjs]
+###### It provides json rpc communication interface and development library with symworld, keystore, local rpc.
+###### npm: https://www.npmjs.com/package/symjs
 
 ## Installation
 #### Node.js
@@ -21,13 +21,15 @@ A minified, browserified file `dist/symjs.min.js` is included for use in the bro
 ## Usage
 Use the symjs object directly from the global namespace:
 ```javascript
-console.log(symjs); // {Symverse: .., SymAccount: ...} 
-// Note: SymAccount Object is available in electron.
+console(SymJs)  // {keystore: ..., utils: ...} 
+
+const symjs = new SymJs();
+console.log(symjs); // {network: ..., keystore: .., utils: ..., signer: ...} 
 ````
-Network connect(`ether`or `symworld` or `local rpc`)
+Network connect(`symverse rpc`)
 ```javascript
-const sjs = new symjs();
-sjs.network.connect("http://localhost:8001").then(connectedMessage => {
+const symjs = new SymJs();
+symjs.network.connect("http://localhost:8001").then(connectedMessage => {
     console.log(connectedMessage, 'connect success...')
 }).catch(e => {
     // connected fail...
@@ -37,35 +39,38 @@ sjs.network.connect("http://localhost:8001").then(connectedMessage => {
 There you go, now you can use it:
 ```javascript
 // Return Promise Object By Json RPC   
-sjs.network.call.getBalance(address); 
-sjs.network.call.clientVersion();
-sjs.network.call.sendTransaction(datas, pk);
+sym.network.call.getBalance(address); 
+sym.network.call.clientVersion();
+sym.network.call.sendTransaction(raw, pk);
 ```
 
-sct api call:
+-  Citizen api call example: 
 ```javascript
 // Return Promise Object By Json RPC   
-let constract = await sjs.network.call.sct.getContract("0x4523ad7875a9c41e9629")
-let account = await sjs.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x4523ad7875a9c41e9629")
+let citizenInfo = await sym.network.call.citizen.getCitizenBySymID("0x00021000000000010002")
+let count = await sym.network.call.citizen.getCitizenCount()
 ```
 
-#### Keystore Create and unlock
+-  Warrant api call example: 
+```javascript
+// Return Promise Object By Json RPC   
+let blockNumber = await sym.network.call.warrant.blockNumber()
+```
+
+-  Sct api call example: 
+```javascript
+// Return Promise Object By Json RPC   
+let constract = await sym.network.call.sct.getContract("0x4523ad7875a9c41e9629")
+let account = await sym.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x00021000000000010002")
+```
+
+#### Keystore Create and Unlock
 ```javascript
 // Return Promise Object
-const keystore = await symjs.keystore.create("1234")
+const keystore = await symjs.keystore.create("1234") // input passphrase
 
 // Return Promise Object ( privateKey )
-const pk = await symjs.keystore.unlock({...keystoreObject}, "1234")
-```
-
-#### Eslint
-```javascript
-npm run lint
-```
-
-#### Testing (mocha)
-```javascript
-npm run test
+const privateKey = await symjs.keystore.unlock(keystore, "1234")
 ```
 
 

@@ -1,21 +1,21 @@
 'use strict';
 
-var helper = require('./helper');
+let helper = require('./helper');
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var ethUtil = require('ethereumjs-util');
-var fees = require('ethereum-common/params.json');
-var BN = ethUtil.BN;
+let ethUtil = require('ethereumjs-util');
+let fees = require('ethereum-common/params.json');
+let BN = ethUtil.BN;
 
 // secp256k1n/2
-var N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
+let N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
 
 /**
  * Creates a new transaction object.
  *
  * @example
- * var rawTx = {
+ * let rawTx = {
  *   nonce: '00',
  *   gasPrice: '09184e72a000',
  *   gasLimit: '2710',
@@ -26,7 +26,7 @@ var N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f4668
  *   r: '5e1d3a76fbf824220eafc8c79ad578ad2b67d01b0c2425eb1f1347e8f50882ab',
  *   s: '5bd428537f05f9830e93792f90ea6a3e2d1ee84952dd96edbae9f658f831ab13'
  * };
- * var tx = new Transaction(rawTx);
+ * let tx = new Transaction(rawTx);
  *
  * @class
  * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the exmple.
@@ -53,11 +53,11 @@ var N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f4668
  * @param {Number} data.chainId EIP 155 chainId - mainnet: 1, ropsten: 3
  * */
 
-var CitizenTransaction = (function () {
+let CitizenTransaction = (function () {
     function CitizenTransaction (data) {
         _classCallCheck(this, CitizenTransaction);
         data = data || {};
-        var fields = [{
+        let fields = [{
             name: 'from',
             allowZero: true,
             length: 10,
@@ -72,17 +72,17 @@ var CitizenTransaction = (function () {
             allowLess: true,
             default: Buffer.from([])
         }, {
-            name: 'symid',
+            name: 'symId',
             allowZero: true,
             length: 10,
             default: Buffer.from([])
         }, {
-            name: 'pubkeyhash',
+            name: 'aKeyPubH',
             length: 32,
             allowLess: true,
             default: Buffer.from([])
         }, {
-            name: 'vflag',
+            name: 'vFlag',
             allowZero: true,
             default: Buffer.from([])
         }, {
@@ -102,15 +102,7 @@ var CitizenTransaction = (function () {
             allowZero: true,
             default: Buffer.from([])
         }, {
-            name: 'refcode',
-            allowZero: true,
-            default: Buffer.from([])
-        }, {
-            name: 'notbefore',
-            allowZero: true,
-            default: Buffer.from([])
-        }, {
-            name: 'notafter',
+            name: 'refCode',
             allowZero: true,
             default: Buffer.from([])
         }, {
@@ -156,8 +148,8 @@ var CitizenTransaction = (function () {
         });
 
         // calculate chainId from signature
-        var sigV = ethUtil.bufferToInt(this.v);
-        var chainId = sigV;
+        let sigV = ethUtil.bufferToInt(this.v);
+        let chainId = sigV;
         if (chainId < 0) chainId = 0;
 
         // set chainId
@@ -183,12 +175,12 @@ var CitizenTransaction = (function () {
     CitizenTransaction.prototype.hash = function hash (includeSignature) {
         if (includeSignature === undefined) includeSignature = true;
 
-        var items = void 0;
+        let items = void 0;
         if (includeSignature) {
             items = this.raw;
         } else {
             if (this._chainId > 0) {
-                var raw = this.raw.slice();
+                let raw = this.raw.slice();
                 this.v = this._chainId;
                 this.r = 0;
                 this.s = 0;
@@ -221,7 +213,7 @@ var CitizenTransaction = (function () {
         if (this._from) {
             return this._from;
         }
-        var pubkey = this.getSenderPublicKey();
+        let pubkey = this.getSenderPublicKey();
         this._from = helper.publicToAddress(pubkey);
         return this._from;
     };
@@ -244,14 +236,14 @@ var CitizenTransaction = (function () {
      */
 
     CitizenTransaction.prototype.verifySignature = function verifySignature () {
-        var msgHash = this.hash(false);
+        let msgHash = this.hash(false);
         // All transaction signatures whose s-value is greater than secp256k1n/2 are considered invalid.
         if (this._homestead && new BN(this.s).cmp(N_DIV_2) === 1) {
             return false;
         }
 
         try {
-            var v = ethUtil.bufferToInt(this.v);
+            let v = ethUtil.bufferToInt(this.v);
             if (this._chainId > 0) {
                 v -= this._chainId * 2 + 8;
             }
@@ -269,8 +261,8 @@ var CitizenTransaction = (function () {
      */
 
     CitizenTransaction.prototype.sign = function sign (privateKey) {
-        var msgHash = this.hash(false);
-        var sig = ethUtil.ecsign(msgHash, privateKey);
+        let msgHash = this.hash(false);
+        let sig = ethUtil.ecsign(msgHash, privateKey);
         sig.v = sig.v - 27;
         Object.assign(this, sig);
     };
@@ -281,9 +273,9 @@ var CitizenTransaction = (function () {
      */
 
     CitizenTransaction.prototype.getDataFee = function getDataFee () {
-        var data = this.raw[5];
-        var cost = new BN(0);
-        for (var i = 0; i < data.length; i++) {
+        let data = this.raw[5];
+        let cost = new BN(0);
+        for (let i = 0; i < data.length; i++) {
             data[i] === 0 ? cost.iaddn(fees.txDataZeroGas.v) : cost.iaddn(fees.txDataNonZeroGas.v);
         }
         return cost;
@@ -295,7 +287,7 @@ var CitizenTransaction = (function () {
      */
 
     CitizenTransaction.prototype.getBaseFee = function getBaseFee () {
-        var fee = this.getDataFee().iaddn(fees.txGas.v);
+        let fee = this.getDataFee().iaddn(fees.txGas.v);
         if (this._homestead && this.toCreationAddress()) {
             fee.iaddn(fees.txCreation.v);
         }
@@ -318,7 +310,7 @@ var CitizenTransaction = (function () {
      */
 
     CitizenTransaction.prototype.validate = function validate (stringError) {
-        var errors = [];
+        let errors = [];
         if (!this.verifySignature()) {
             errors.push('Invalid Signature');
         }

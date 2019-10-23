@@ -1,6 +1,6 @@
-var keythereum = require('./keyetherume-sha3');
+let keythereum = require('./keyetherume-sha3');
 
-var SymverseKeystore = {
+let SymverseKeystore = {
     privateCreateOptions: { keyBytes: 32, ivBytes: 16 },
     keystoreCreateOptions: {
         kdf: 'scrypt',
@@ -18,16 +18,16 @@ var SymverseKeystore = {
 
     /**
      * keystore 생성
-     * @param password string
+     * @param passphrase string
      * @param addData function
      * @param listener function
      * @return Promise
      */
-    create (password, addData, listener) {
+    create (passphrase, addData, listener) {
         return new Promise((res, rej) => {
             this.createPrivateKey(listener)
                 .then(dk => {
-                    return this.createKeystore(dk, password, listener);
+                    return this.createKeystore(dk, passphrase, listener);
                 }).then(keystore => {
                     res(keystore);
                 }).catch(e => {
@@ -55,13 +55,13 @@ var SymverseKeystore = {
     /**
      * keysotre 생성
      * @param dk object|array
-     * @param password object|array
+     * @param passphrase object|array
      * @param createListener function
      * @return Promise
      */
-    createKeystore (dk, password, createListener) {
+    createKeystore (dk, passphrase, createListener) {
         return new Promise((res, rej) => {
-            keythereum.dump(password, dk.privateKey, dk.salt, dk.iv, this.keystoreCreateOptions, (keystore) => {
+            keythereum.dump(passphrase, dk.privateKey, dk.salt, dk.iv, this.keystoreCreateOptions, (keystore) => {
                 if (createListener && createListener) {
                     createListener(this.listener.KEYSTORE_CREATED);
                 }

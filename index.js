@@ -1,16 +1,16 @@
-var SymNetwork = require('./src/network');
-var SymHelper = require('./src/helper');
-var SymTx = require('./src/signer');
-var Keystore = require('./src/keystore/keystore');
+let SymNetwork = require('./src/network');
+let SymHelper = require('./src/helper');
+let SymTx = require('./src/signer');
+let Keystore = require('./src/keystore/keystore');
 
-var Symjs = function () {
+let SymJs = function () {
     this.network = SymNetwork;
     this.utils = SymHelper;
     this.sigenr = SymTx;
     this.keystore = Keystore;
 };
 
-Symjs.keystore = Keystore
-Symjs.utils = SymHelper
+SymJs.keystore = Keystore;
+SymJs.utils = SymHelper;
 
-module.exports = Symjs;
+module.exports = SymJs;

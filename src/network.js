@@ -1,8 +1,8 @@
-var SymMethod = require('./rpcapi/sym-methods');
+var SymMethod = require('./rpcapi/methods');
 var HttpProvider = require('ethjs-provider-http');
-var EthRPC = require('ethjs-rpc');
+var SymRPC = require('./rpcapi/symrpc');
 
-const notConnectedError = 'connect() 함수를 통해 rpc 연결을 확인해 주시기 바랍니다.'
+const notConnectedError = 'connect() 함수를 통해 rpc 연결을 확인해 주시기 바랍니다.';
 
 const Network = (function () {
     let engine = {};
@@ -43,7 +43,7 @@ const Network = (function () {
 
     function setHttpProvider (url) {
         resetEngineConnect();
-        engine = new EthRPC(new HttpProvider(url));
+        engine = new SymRPC(new HttpProvider(url));
     }
 
     function hasEngine () {
