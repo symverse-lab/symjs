@@ -45,6 +45,7 @@ sym.network.call.sendTransaction(raw, pk);
 ```
 
 -  Citizen api call example: 
+
 ```javascript
 // Return Promise Object By Json RPC   
 let citizenInfo = await sym.network.call.citizen.getCitizenBySymID("0x00021000000000010002")
@@ -52,12 +53,14 @@ let count = await sym.network.call.citizen.getCitizenCount()
 ```
 
 -  Warrant api call example: 
+
 ```javascript
 // Return Promise Object By Json RPC   
 let blockNumber = await sym.network.call.warrant.blockNumber()
 ```
 
 -  Sct api call example: 
+
 ```javascript
 // Return Promise Object By Json RPC   
 let constract = await sym.network.call.sct.getContract("0x4523ad7875a9c41e9629")
