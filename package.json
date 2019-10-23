@@ -5,7 +5,7 @@
     "symjs",
     "blockchain"
   ],
-  "license": "MIT",
+  "license": "LGPL-3.0",
   "main": "index.js",
   "name": "symjs",
   "scripts": {
@@ -14,12 +14,12 @@
     "build_dev": "WEBPACK_ENV=build webpack --development",
     "test": "mocha $(find ./tests -name '*.spec.js') --require @babel/register --recursive -w "
   },
-  "version": "0.0.0-beta6",
+  "version": "1.0.0-beta",
   "author": {
-    "name": "symverse",
+    "name": "gocheat",
     "email": "itsinil@gmail.com"
   },
-  "description": "symwallet network javascript api library",
+  "description": "symverse network javascript api library",
   "dependencies": {
 
     "@types/bn.js": "^4.11.4",
