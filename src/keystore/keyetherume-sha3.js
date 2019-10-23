@@ -9,7 +9,7 @@ var isBrowser = typeof process === 'undefined' || !process.nextTick || Boolean(p
 
 var sjcl = require('sjcl');
 var uuid = require('uuid');
-const scrypt = require('scrypt')
+const scrypt = require('../utils/scrypt')
 var secp256k1 = require('secp256k1/elliptic');
 const { SHA3 } = require('sha3');
 const sha3 = new SHA3(256);
@@ -196,7 +196,7 @@ module.exports = {
      */
     deriveKeyUsingScryptInBrowser: function (password, salt, options, cb) {
         var self = this;
-        if (this.scrypt === null) this.scrypt = require('./lib/scrypt');
+        if (this.scrypt === null) this.scrypt = require('../utils/scrypt');
         if (isFunction(this.scrypt)) {
             this.scrypt = this.scrypt(options.kdfparams.memory || this.constants.scrypt.memory);
         }
