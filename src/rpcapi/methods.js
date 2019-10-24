@@ -1,12 +1,13 @@
-let helper = require('../helper');
-let tx = require('../signer');
-let SctParams = require('./sct');
+const helper = require('../utils/helper');
+const tx = require('../signer');
+const SctParams = require('./sct');
+const citizenMethod = require('./citizen');
+const warrantMethod = require('./warrant');
+const oracleMethod = require('./oracle');
 
 const Methods = function () {
     this.rpc = {};
     const _this = this;
-    const defaultBlock = 'latest';
-
     const initRpc = function (arg) {
         let args = Array.prototype.slice.call(arg);
         if (args.length < 0) {
@@ -27,10 +28,52 @@ const Methods = function () {
             'web3_clientVersion'
         ));
     };
+
+    this.sha3 = (params) => {
+        return _this.rpc(payload(
+            'web3_sha3', [params]
+        ));
+    };
+
     // ============== sym ============== //
+    this.netVersion = () => {
+        return _this.rpc(payload(
+            'net_version'
+        ));
+    };
+
+    this.netListening = () => {
+        return _this.rpc(payload(
+            'net_listening'
+        ));
+    };
+
+    this.netPeerCount = () => {
+        return _this.rpc(payload(
+            'net_peerCount'
+        ));
+    };
+
+    this.protocolVersion = () => {
+        return _this.rpc(payload(
+            'sym_protocolVersion'
+        ));
+    };
+
+    this.syncing = () => {
+        return _this.rpc(payload(
+            'sym_syncing'
+        ));
+    };
+
+    this.symbase = () => {
+        return _this.rpc(payload(
+            'sym_symbase'
+        ));
+    };
     this.getBalance = (address) => {
         return _this.rpc(payload(
-            'sym_getBalance', [address, defaultBlock]
+            'sym_getBalance', [address, helper.DEFAULT_BLOCK]
         ), helper.hexToNumberString);
     };
     this.accounts = () => {
@@ -38,123 +81,124 @@ const Methods = function () {
             'sym_accounts'
         ));
     };
-    this.getTransactionCount = (address) => {
+    this.blockNumber = () => {
         return _this.rpc(payload(
-            'sym_getTransactionCount', [address, defaultBlock]
+            'sym_blockNumber', []
+        ));
+    };
+    this.getBlockByHash = (blockHash, isFull) => {
+        isFull = isFull || false;
+        return _this.rpc(payload(
+            'sym_getBlockByHash', [blockHash, isFull]
+        ));
+    };
+    this.getBlockByNumber = (blockNumber, isFull) => {
+        blockNumber = blockNumber || helper.DEFAULT_BLOCK;
+        isFull = isFull || false;
+        return _this.rpc(payload(
+            'sym_getBlockByNumber', [blockNumber, isFull]
+        ));
+    };
+    this.getBlockTransactionCountByHash = (blockHash) => {
+        return _this.rpc(payload(
+            'sym_getBlockTransactionCountByHash', [blockHash]
         ), helper.hexToNumberString);
     };
-    this.getTransactionByHash = (tx) => {
+    this.getBlockTransactionCountByNumber = (blockNumber) => {
+        blockNumber = blockNumber || helper.DEFAULT_BLOCK;
         return _this.rpc(payload(
-            'sym_getTransactionByHash', [tx]
+            'sym_getBlockTransactionCountByNumber', [blockNumber]
+        ), helper.hexToNumberString);
+    };
+    this.sign = (address, msg) => {
+        return _this.rpc(payload(
+            'sym_sign', [address, msg]
         ));
     };
-    this.getTransactionReceipt = (tx) => {
+    this.getTransactionCount = (address, blockNumber) => {
+        blockNumber = blockNumber || helper.DEFAULT_BLOCK;
         return _this.rpc(payload(
-            'sym_getTransactionReceipt', [tx]
+            'sym_getTransactionCount', [address, blockNumber]
+        ), helper.hexToNumberString);
+    };
+    this.getTransactionByHash = (hash) => {
+        return _this.rpc(payload(
+            'sym_getTransactionByHash', [hash]
         ));
     };
-    this.sendTransaction = (datas, pt) => {
+    this.getTransactionByBlockHashAndIndex = (hash, index) => {
         return _this.rpc(payload(
-            'sym_sendRawTransaction', [tx.sign(datas, pt)]
+            'sym_getTransactionByBlockHashAndIndex', [hash, index]
         ));
     };
-    // ============== citizen ============== //
-    this.citizen = {
-        sendCitizen: (datas, pt) => {
-            return _this.rpc(payload(
-                'citizen_sendRawCitizen', [tx.citizenSign(datas, pt)]
-            ));
-        },
-        getCitizenByHash: (tx) => {
-            return _this.rpc(payload(
-                'citizen_getCitizenByHash', [tx]
-            ));
-        },
-        getRawCitizenByHash: (tx) => {
-            return _this.rpc(payload(
-                'citizen_getRawCitizenByHash', [tx]
-            ));
-        },
-        getCitizenBySymID: (symId) => {
-            return _this.rpc(payload(
-                'citizen_getCitizenBySymID', [symId, defaultBlock]
-            ));
-        },
-        getRawCitizenBySymID: (symId) => {
-            return _this.rpc(payload(
-                'citizen_getRawCitizenBySymID', [symId, defaultBlock]
-            ));
-        },
-        getCitizenCount: () => {
-            return _this.rpc(payload(
-                'citizen_getCitizenCount', []
-            ));
-        },
-        pendingCitizens: () => {
-            return _this.rpc(payload(
-                'citizen_pendingCitizens', []
-            ));
-        },
-        blockNumber: () => {
-            return _this.rpc(payload(
-                'citizen_blockNumber', []
-            ));
-        },
-        // getBlock: (number, isFull) => {
-        //     if (typeof isFull === 'undefined') {
-        //         isFull = false;
-        //     }
-        //     return _this.rpc(payload(
-        //         'citizen_getBlock', [number, isFull]
-        //     ));
-        // },
+    this.getTransactionByBlockNumberAndIndex = (blockNumber, index) => {
+        blockNumber = blockNumber || helper.DEFAULT_BLOCK;
+        return _this.rpc(payload(
+            'sym_getTransactionByBlockNumberAndIndex', [blockNumber, index]
+        ));
+    };
+    this.getTransactionReceipt = (hash) => {
+        return _this.rpc(payload(
+            'sym_getTransactionReceipt', [hash]
+        ));
+    };
+    this.sendTransaction = (txRaw, pk) => {
+        return _this.rpc(payload(
+            'sym_sendRawTransaction', [tx.sign(txRaw, pk)]
+        ));
+    };
+    this.getDeposit = (address) => {
+        return _this.rpc(payload(
+            'sym_getDeposit', [address]
+        ));
     };
 
-    // ============== warrant ============== //
-
-    this.warrant = {
-        blockNumber: () => {
-            return _this.rpc(payload(
-                'warrant_blockNumber', []
-            ));
-        },
-        // getBlock: (number, isFull) => {
-        //     if (typeof isFull === 'undefined') {
-        //         isFull = true;
-        //     }
-        //     return _this.rpc(payload(
-        //         'warrant_getBlock', [number, isFull]
-        //     ));
-        // },
+    this.setDeposit = (address, deposit) => {
+        return _this.rpc(payload(
+            'sym_setDeposit', [address, deposit]
+        ));
     };
 
-    // ============== sct ============== //
+    this.restoreDeposit = (address) => {
+        return _this.rpc(payload(
+            'sym_restoreDeposit', [address]
+        ));
+    };
+
+    this.citizen = citizenMethod(_this.rpc, payload);
+    this.warrant = warrantMethod(_this.rpc, payload);
+    this.oracle = oracleMethod(_this.rpc, payload);
 
     this.sct = {
         params: SctParams,
-        getContract: (csymid) => {
+        getContract: (contract, blockNumber) => {
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK
             return _this.rpc(payload(
-                'sct_getContract', [csymid, defaultBlock]
+                'sct_getContract', [contract, blockNumber]
             ));
         },
-        getContractAccount: (csymid, symid) => {
+        getContractAccount: (contract, symId, blockNumber) => {
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK
             return _this.rpc(payload(
-                'sct_getContractAccount', [csymid, symid, defaultBlock]
+                'sct_getContractAccount', [contract, symId, blockNumber]
             ));
         },
-        getContractItem: (csymid, number) => {
+        getContractItem: (contract, number, blockNumber) => {
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK
             return _this.rpc(payload(
-                'sct_getContractItem', [csymid, number, defaultBlock]
+                'sct_getContractItem', [contract, number, blockNumber]
             ));
         },
-        getContractItemsByCategory: (csymid, groupNumber) => {
+        getContractItemsByCategory: (contract, groupNumber, blockNumber) => {
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK
             return _this.rpc(payload(
-                'sct_getContractItemsByCategory', [csymid, groupNumber, defaultBlock]
+                'sct_getContractItemsByCategory', [contract, groupNumber,blockNumber]
             ));
         },
-        getAllowance: (csymid, owner, spender) => {
+        getAllowance: (contract, owner, spender, blockNumber) => {
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK
             return _this.rpc(payload(
-                'sct_getAllowance', [csymid, owner, spender, defaultBlock]
+                'sct_getAllowance', [contract, owner, spender, blockNumber]
             ));
         }
     };

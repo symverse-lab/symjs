@@ -5,9 +5,11 @@ const { SHA3 } = require('sha3');
 const BN = require('bn.js');
 const ethUtil = require('ethereumjs-util');
 const numberToBN = require('number-to-bn');
-const utils = require('web3-utils');
 
 const _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj; };
+
+const DEFAULT_BLOCK = 'latest';
+const PADDING_BLOCK = 'padding';
 
 const isHex = (value) => {
     const hexRegEx = /([0-9]|[a-f])/gim;
@@ -74,14 +76,98 @@ function paramsToHex (params) {
     for (let i in params) {
         if (Array.isArray(params[i])) {
             for (let j in params[i]) {
-                params[i][j] = utils.toHex(params[i][j]);
+                params[i][j] = toHex(params[i][j]);
             }
         } else {
-            params[i] = utils.toHex(params[i]);
+            params[i] = toHex(params[i]);
         }
     }
     return params;
 }
+
+const toHex = function (value, returnType) {
+    if (isAddress(value)) {
+        return returnType ? 'address' : '0x' + value.toLowerCase().replace(/^0x/i, '');
+    }
+
+    if (_.isBoolean(value)) {
+        return returnType ? 'bool' : value ? '0x01' : '0x00';
+    }
+
+    if (_.isObject(value) && !isBigNumber(value) && !isBN(value)) {
+        return returnType ? 'string' : utf8ToHex(JSON.stringify(value));
+    }
+
+    // if its a negative number, pass it through numberToHex
+    if (_.isString(value)) {
+        if (value.indexOf('-0x') === 0 || value.indexOf('-0X') === 0) {
+            return returnType ? 'int256' : numberToHex(value);
+        } else if (value.indexOf('0x') === 0 || value.indexOf('0X') === 0) {
+            return returnType ? 'bytes' : value;
+        } else if (!isFinite(value)) {
+            return returnType ? 'string' : utf8ToHex(value);
+        }
+    }
+
+    return returnType ? (value < 0 ? 'int256' : 'uint256') : numberToHex(value);
+};
+
+const isBigNumber = function (object) {
+    return object && object.constructor && object.constructor.name === 'BigNumber';
+};
+
+const isBN = function (object) {
+    return object instanceof BN ||
+        (object && object.constructor && object.constructor.name === 'BN');
+};
+
+const isAddress = function (address) {
+    // check if it has the basic requirements of an address
+    if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+        return false;
+        // If it's ALL lowercase or ALL upppercase
+    } else if (/^(0x|0X)?[0-9a-f]{40}$/.test(address) || /^(0x|0X)?[0-9A-F]{40}$/.test(address)) {
+        return true;
+        // Otherwise check each case
+    } else {
+        return checkAddressChecksum(address);
+    }
+};
+
+const checkAddressChecksum = function (address) {
+    // Check each case
+    address = address.replace(/^0x/i, '');
+    var addressHash = sha3(address.toLowerCase()).replace(/^0x/i, '');
+
+    for (var i = 0; i < 40; i++) {
+        // the nth letter should be uppercase if the nth digit of casemap is 1
+        if ((parseInt(addressHash[i], 16) > 7 && address[i].toUpperCase() !== address[i]) || (parseInt(addressHash[i], 16) <= 7 && address[i].toLowerCase() !== address[i])) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const utf8ToHex = function (str) {
+    str = utf8.encode(str);
+    var hex = '';
+
+    // remove \u0000 padding from either side
+    str = str.replace(/^(?:\u0000)*/, '');
+    str = str.split('').reverse().join('');
+    str = str.replace(/^(?:\u0000)*/, '');
+    str = str.split('').reverse().join('');
+
+    for (var i = 0; i < str.length; i++) {
+        var code = str.charCodeAt(i);
+        // if (code !== 0) {
+        var n = code.toString(16);
+        hex += n.length < 2 ? '0' + n : n;
+        // }
+    }
+
+    return '0x' + hex;
+};
 
 const toUnit = (balance, unit, decimal) => {
     function unitConvert (uint) {
@@ -115,7 +201,7 @@ const toUnit = (balance, unit, decimal) => {
     return Math.floor(balance / Math.pow(10, pow) * (Math.pow(10, decimal))) / (Math.pow(10, decimal));
 };
 
-const toWei = (balance) => {
+const toHug = (balance) => {
     return balance * Math.pow(10, 18);
 };
 
@@ -246,7 +332,9 @@ const defineProperties = (self, fields, data) => {
     }
 };
 
-module.exports = {
+export default {
+    DEFAULT_BLOCK,
+    PADDING_BLOCK,
     isHex,
     appendHex,
     c10,
@@ -257,7 +345,7 @@ module.exports = {
     paramsToHex,
     stringToHex,
     numberToHex,
-    toWei,
+    toHug,
     toUnit,
     rlphash,
     sha3,

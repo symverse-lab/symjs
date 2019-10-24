@@ -19,7 +19,7 @@ const Network = (function () {
     // RPC 연결 시도
     function connectWait (url, wait) {
         setHttpProvider(url);
-        return waithttpRpcConnect(wait);
+        return waitHttpRpcConnect(wait);
     }
 
     // rpc 기본 통신
@@ -80,7 +80,7 @@ const Network = (function () {
     }
 
     // RPC URL 연결 지속 체크
-    function waithttpRpcConnect (listening) {
+    function waitHttpRpcConnect (listening) {
         if (!hasEngine()) {
             throw new Error(notConnectedError);
         }
@@ -115,4 +115,4 @@ const Network = (function () {
     };
 })();
 
-module.exports = Network;
+export default Network;

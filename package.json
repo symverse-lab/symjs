@@ -10,7 +10,7 @@
   "name": "symjs",
   "scripts": {
     "lint": "eslint ./src/**/*.js",
-    "build": "WEBPACK_ENV=build webpack --production",
+    "build": "NODE_ENV=production WEBPACK_ENV=build webpack --production",
     "build_dev": "WEBPACK_ENV=build webpack --development",
     "test": "mocha $(find ./tests -name '*.spec.js') --require @babel/register --recursive -w "
   },

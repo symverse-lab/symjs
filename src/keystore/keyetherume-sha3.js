@@ -507,8 +507,8 @@ module.exports = {
     /**
      * Import key data object from keystore JSON file.
      * (Note: Node.js only!)
-     * @param {string} address Ethereum address to import.
-     * @param {string=} datadir Ethereum data directory (default: ~/.ethereum).
+     * @param {string} address Symverse address to import.
+     * @param {string=} datadir Symverse data directory (default: ~/.symverse).
      * @param {function=} cb Callback function (optional).
      * @return {Object} Keystore data file's contents.
      */
@@ -534,7 +534,7 @@ module.exports = {
             return filepath;
         }
 
-        datadir = datadir || path.join(process.env.HOME, '.ethereum');
+        datadir = datadir || path.join(process.env.HOME, '.symverse');
         keystore = path.join(datadir, 'keystore');
         if (!isFunction(cb)) {
             filepath = findKeyfile(keystore, address, fs.readdirSync(keystore));

@@ -107,11 +107,9 @@ describe('라이브러리 기능 체크', function () {
                 "credit":1,
                 "role":1,
                 "refcode":1,
-                "notbefore": null,
-                "notafter": null,
                 "chainId": 3
             };
-            let tx = symjs.sigenr.citizenSigner(params, pk);
+            let tx = symjs.sigenr.citizenSign(params, pk);
             rawList.push(tx)
         }
         //tx 데이터 작성

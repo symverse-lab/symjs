@@ -3,12 +3,14 @@ const path = require('path')
 const env = process.env.WEBPACK_ENV;
 const isDev = process.env.NODE_ENV !== 'production';
 
+
 var libraryName = 'symjs';
 var plugins = [], outputFile;
 
 if (env === 'build' && !isDev) {
     plugins.push(new UglifyJsPlugin());
     outputFile = libraryName + '.min.js';
+    console.log(outputFile)
 } else {
     outputFile = libraryName + '.js';
 }

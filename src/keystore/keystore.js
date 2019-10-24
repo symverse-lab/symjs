@@ -85,4 +85,4 @@ let SymverseKeystore = {
     }
 };
 
-module.exports = SymverseKeystore;
+export default SymverseKeystore;

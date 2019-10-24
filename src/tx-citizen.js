@@ -1,6 +1,6 @@
 'use strict';
 
-let helper = require('./helper');
+let helper = require('./utils/helper');
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -329,4 +329,4 @@ let CitizenTransaction = (function () {
     return CitizenTransaction;
 }());
 
-module.exports = CitizenTransaction;
+export default CitizenTransaction;

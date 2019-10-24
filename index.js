@@ -1,16 +1,15 @@
-let SymNetwork = require('./src/network');
-let SymHelper = require('./src/helper');
-let SymTx = require('./src/signer');
-let Keystore = require('./src/keystore/keystore');
+import SymNetwork from './src/network' ;
+import helper from './src/utils/helper';
+import SymTx from './src/signer';
+import Keystore from './src/keystore/keystore';
 
-let SymJs = function () {
+let SymJs = () => {
     this.network = SymNetwork;
-    this.utils = SymHelper;
+    this.utils = helper;
     this.sigenr = SymTx;
-    this.keystore = Keystore;
 };
 
 SymJs.keystore = Keystore;
-SymJs.utils = SymHelper;
+SymJs.utils = helper;
 
-module.exports = SymJs;
+export default SymJs;

@@ -13,5 +13,4 @@ describe("SymJs", function () {
         console.log(SymJs.keystore )
     });
 
-
 });

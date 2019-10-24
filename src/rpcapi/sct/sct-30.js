@@ -1,4 +1,4 @@
-let helper = require('../../helper');
+let helper = require('../../utils/helper');
 
 function SctFormat (type, method, params) {
     this.type = type;
@@ -12,7 +12,7 @@ SctFormat.prototype.raw = function () {
 };
 
 let sct30 = (function () {
-    let type = 1;
+    let type = 30;
 
     return {
         create: function (name, symbol, totalSupply, ownerSymId) {

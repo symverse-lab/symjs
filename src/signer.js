@@ -1,4 +1,4 @@
-const helper = require('./helper');
+const helper = require('./utils/helper');
 const CitizenTx = require('./tx-citizen');
 const SymverseTx = require('./tx-transaction');
 
@@ -16,7 +16,7 @@ function citizenSign (params, pk) {
     return '0x' + ctx.serialize().toString('hex');
 }
 
-module.exports = {
+export default {
     sign,
     citizenSign
 };
