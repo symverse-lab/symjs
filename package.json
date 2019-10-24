@@ -14,7 +14,7 @@
     "build_dev": "WEBPACK_ENV=build webpack --development",
     "test": "mocha $(find ./tests -name '*.spec.js') --require @babel/register --recursive -w "
   },
-  "version": "1.0.0-beta",
+  "version": "1.1.0-beta",
   "author": {
     "name": "gocheat",
     "email": "itsinil@gmail.com"
