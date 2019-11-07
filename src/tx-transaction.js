@@ -138,11 +138,11 @@ let Transaction = (function () {
          * @name from
          * @memberof Transaction
          */
-        Object.defineProperty(this, 'from', {
-            enumerable: true,
-            configurable: true,
-            get: this.getSenderAddress.bind(this)
-        });
+        // Object.defineProperty(this, 'from', {
+        //     enumerable: true,
+        //     configurable: true,
+        //     get: this.getSenderAddress.bind(this)
+        // });
 
         // calculate chainId from signature
         let sigV = helper.bufferToInt(this.v);

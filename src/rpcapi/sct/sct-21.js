@@ -42,7 +42,6 @@ let sct20 = (function () {
         burn: function (to, amount) {
             return new SctFormat(type, 6, [to, amount]);
         },
-
         pause: function () {
             return new SctFormat(type, 7, []);
         },
@@ -51,7 +50,28 @@ let sct20 = (function () {
         },
         transferOwner: function () {
             return new SctFormat(type, 9, []);
-        }
+        },
+        lockTransfer: function (to, amount, lockAmount) {
+            return new SctFormat(type, 10, [to, amount, lockAmount]);
+        },
+        unlockAmount: function (to, amount) {
+            return new SctFormat(type, 11, [to, amount]);
+        },
+        restoreLockAmount: function (to, amount) {
+            return new SctFormat(type, 12, [to, amount]);
+        },
+        addLockAmount: function (amount) {
+            return new SctFormat(type, 13, [amount]);
+        },
+        subLockAmount: function (to, amount) {
+            return new SctFormat(type, 14, [amount]);
+        },
+        AccountLock: function (to, amount) {
+            return new SctFormat(type, 15, [amount]);
+        },
+        AccountUnLock: function (to, amount) {
+            return new SctFormat(type, 16, [amount]);
+        },
     };
 })();
 

@@ -28,19 +28,19 @@ describe('Transaction raw Test Cases', function () {
     });
 
     it('SCTx Raw encode', () => {
-        const pk = "e72b3b417632c71c22579a7cb255c5fddbb3cc9f05a8d253ed7582ad5ed947ba";
         //tx 데이터 작성
         let params = {
             from: "0x00021000000000010002",
-            nonce: 213,
+            nonce: 214,
             gasPrice: '0x09184e72a000000',
             gasLimit: '0x271000',
             workNodes: ["0x00021000000000010002"],
             type: 1,
+            input: "0x"+symjs.param.sct20.create("HI","asd", 12323, "0x00021000000000010002").raw(),
             chainId: 7777
         };
-        let tx = symjs.sigenr.sign(params, pk);
-        console.log(SymJs.utils.decodeRlp(tx))
+        let tx = symjs.signer.sign(params, pk);
+        console.log(tx, SymJs.utils.decodeRlp(tx))
     });
 
     it('Citizen Tx Raw encode', () => {

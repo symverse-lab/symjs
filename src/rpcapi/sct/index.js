@@ -1,10 +1,8 @@
-import Methods from '../methods';
+import sct20 from './sct-20';
+import sct30 from './sct-30';
+import sct40 from './sct-40';
 
-let sct20 = require('./sct-20');
-let sct30 = require('./sct-30');
-let sct40 = require('./sct-40');
-
-export default  {
+export default {
     sct20,
     sct30,
     sct40

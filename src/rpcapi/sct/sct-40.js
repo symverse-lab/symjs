@@ -36,15 +36,19 @@ let sct40 = (function () {
         allowance: function (from, index) {
             return new SctFormat(type, 4, [from, index]);
         },
-
-        itemLock: function (index) {
+        couponUse: function (index) {
             return new SctFormat(type, 5, [index]);
         },
-
-        itemUnLock: function (index) {
+        couponPause: function (index) {
             return new SctFormat(type, 6, [index]);
+        },
+        couponUnPause: function (index) {
+            return new SctFormat(type, 7, [index]);
+        },
+        transferOwner: function () {
+            return new SctFormat(type, 8, []);
         }
     };
 })();
 
-export default  sct40;
+export default sct40;

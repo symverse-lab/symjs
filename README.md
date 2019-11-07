@@ -44,6 +44,7 @@ symjs.network.call.clientVersion();
 ```
 
 -  Make Transaction Raw example:
+
 ```javascript
 let privateKey = "1a43aa399cb2efe186317e0b09f4a7ef88b83cff05089b145709881bf4db3a20"
 let params = {

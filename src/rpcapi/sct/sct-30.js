@@ -37,14 +37,17 @@ let sct30 = (function () {
             return new SctFormat(type, 4, [from, index]);
         },
 
-        itemLock: function (index) {
+        itemPause: function (index) {
             return new SctFormat(type, 5, [index]);
         },
 
-        itemUnLock: function (index) {
+        itemUnPause: function (index) {
             return new SctFormat(type, 6, [index]);
+        },
+        transferOwner: function () {
+            return new SctFormat(type, 9, []);
         }
     };
 })();
 
-export default  sct30;
+export default sct30;
