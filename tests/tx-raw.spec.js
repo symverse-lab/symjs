@@ -60,10 +60,10 @@ describe('Transaction raw Test Cases', function () {
             "role":1,
             "refcode":1,
             "writetime": 1563129385,
-            "chainId": 3
+            "chainId": 7777
         };
         //add v,r,s (tx sign)
-        let tx = symjs.sigenr.citizenSign(params, pk);
+        let tx = symjs.signer.citizenSign(params, pk);
         console.log(tx)
         let result = "0xf8678a000200000000000100028a00000000000000000001808080800001010180845d2b762901a081e693e8710f5041cb8d47c5b223e264e97296c6030695d2e96e8f092179f59da001d9bf1943b8fc1c7461f45a18557bf1e4c0412f14b6007152aeff69465df957"
         should.equal(result, tx, "citizen rlp encode error")
