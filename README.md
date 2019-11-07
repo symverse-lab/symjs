@@ -43,7 +43,7 @@ symjs.network.call.getBalance(address);
 symjs.network.call.clientVersion();
 ```
 
--  Make Transaction Raw example:
+-  Send Raw Transaction example:
 
 ```javascript
 let privateKey = "1a43aa399cb2efe186317e0b09f4a7ef88b83cff05089b145709881bf4db3a20"
@@ -57,6 +57,38 @@ let params = {
     "workNodes": ["0x00021000000000010002"],
     "chainId": 7777 //require
 };
+// Return Promise Object By Json RPC   
+symjs.network.call.sendTransaction(params, privateKey);
+```
+
+-  Send SCT Raw Transaction example:
+
+```javascript
+//sct input tools
+symjs.param.sct20.create("HI","asd", 12323, "0x00021000000000010002")
+symjs.param.sct20.transfer(to, amount)
+symjs.param.sct20.transferFrom(from, to, amount)
+symjs.param.sct20.approve(to, amount)
+
+symjs.param.sct21 ...
+symjs.param.sct30 ...
+symjs.param.sct40 ...
+...
+````
+
+```javascript
+let privateKey = "1a43aa399cb2efe186317e0b09f4a7ef88b83cff05089b145709881bf4db3a20"
+let params = {
+    from: "0x00021000000000010002",
+    nonce: 214,
+    gasPrice: '0x09184e72a000000',
+    gasLimit: '0x271000',
+    workNodes: ["0x00021000000000010002"],
+    type: 1,
+    input: "0x"+symjs.param.sct20.create("HI","asd", 12323, "0x00021000000000010002").raw(),
+    chainId: 7777
+};
+
 // Return Promise Object By Json RPC   
 symjs.network.call.sendTransaction(params, privateKey);
 ```

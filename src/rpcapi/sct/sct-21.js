@@ -11,12 +11,12 @@ SctFormat.prototype.raw = function () {
     return helper.encodeRlp(sct).toString('hex');
 };
 
-let sct20 = (function () {
-    let type = 20;
+let sct21 = (function () {
+    let type = 21;
 
     return {
-        create: function (name, symbol, totalSupply, ownerSymId) {
-            return new SctFormat(type, 0, [name, symbol, totalSupply, ownerSymId]);
+        create: function (name, symbol, totalSupply,TotalLockSupply, ownerSymId) {
+            return new SctFormat(type, 0, [name, symbol, totalSupply, TotalLockSupply, ownerSymId]);
         },
 
         transfer: function (to, amount) {
@@ -27,11 +27,11 @@ let sct20 = (function () {
             return new SctFormat(type, 2, [from, to, amount]);
         },
 
-        allowance: function (to, amount) {
+        approve: function (to, amount) {
             return new SctFormat(type, 3, [to, amount]);
         },
 
-        decreaseAllowance: function (to, amount) {
+        decreaseApprove: function (to, amount) {
             return new SctFormat(type, 4, [to, amount]);
         },
 
@@ -48,8 +48,8 @@ let sct20 = (function () {
         unpause: function () {
             return new SctFormat(type, 8, []);
         },
-        transferOwner: function () {
-            return new SctFormat(type, 9, []);
+        transferOwner: function (newOwner) {
+            return new SctFormat(type, 9, [newOwner]);
         },
         lockTransfer: function (to, amount, lockAmount) {
             return new SctFormat(type, 10, [to, amount, lockAmount]);
@@ -75,4 +75,4 @@ let sct20 = (function () {
     };
 })();
 
-export default sct20;
+export default sct21;

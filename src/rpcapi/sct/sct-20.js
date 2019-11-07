@@ -27,11 +27,11 @@ let sct20 = (function () {
             return new SctFormat(type, 2, [from, to, amount]);
         },
 
-        allowance: function (to, amount) {
+        approve: function (to, amount) {
             return new SctFormat(type, 3, [to, amount]);
         },
 
-        decreaseAllowance: function (to, amount) {
+        decreaseApprove: function (to, amount) {
             return new SctFormat(type, 4, [to, amount]);
         },
 
@@ -49,8 +49,8 @@ let sct20 = (function () {
         unpause: function () {
             return new SctFormat(type, 8, []);
         },
-        transferOwner: function () {
-            return new SctFormat(type, 9, []);
+        transferOwner: function (newOwner) {
+            return new SctFormat(type, 9, [newOwner]);
         }
     };
 })();

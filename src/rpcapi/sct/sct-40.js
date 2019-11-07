@@ -17,24 +17,24 @@ let sct40 = (function () {
     let type = 40;
 
     return {
-        create: function (name, symbol, totalSupply, ownerSymId) {
-            return new SctFormat(type, 0, [name, symbol, totalSupply, ownerSymId]);
+        create: function (name, symbol, TotalCPoint, ownerSymId) {
+            return new SctFormat(type, 0, [name, symbol, TotalCPoint, ownerSymId]);
         },
 
         createItem: function (items) {
             return new SctFormat(type, 1, items);
         },
 
-        transfer: function (from, index) {
-            return new SctFormat(type, 2, [from, index]);
+        transfer: function (to, index) {
+            return new SctFormat(type, 2, [to, index]);
         },
 
         transferFrom: function (from, to, index) {
             return new SctFormat(type, 3, [from, to, index]);
         },
 
-        allowance: function (from, index) {
-            return new SctFormat(type, 4, [from, index]);
+        approve: function (to, index) {
+            return new SctFormat(type, 4, [to, index]);
         },
         couponUse: function (index) {
             return new SctFormat(type, 5, [index]);
@@ -45,8 +45,8 @@ let sct40 = (function () {
         couponUnPause: function (index) {
             return new SctFormat(type, 7, [index]);
         },
-        transferOwner: function () {
-            return new SctFormat(type, 8, []);
+        transferOwner: function (newOwner) {
+            return new SctFormat(type, 8, [newOwner]);
         }
     };
 })();
