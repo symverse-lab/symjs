@@ -1,6 +1,6 @@
 'use strict';
 
-let helper = require('./utils/helper');
+import helper from './utils/helper';
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -145,7 +145,7 @@ let Transaction = (function () {
         });
 
         // calculate chainId from signature
-        let sigV = ethUtil.bufferToInt(this.v);
+        let sigV = helper.bufferToInt(this.v);
         let chainId = sigV;
         if (chainId < 0) chainId = 0;
         // set chainId
@@ -204,14 +204,14 @@ let Transaction = (function () {
      * @return {Buffer}
      */
 
-    Transaction.prototype.getSenderAddress = function getSenderAddress () {
-        if (this._from) {
-            return this._from;
-        }
-        let pubkey = this.getSenderPublicKey();
-        this._from = helper.publicToAddress(pubkey);
-        return this._from;
-    };
+    // Transaction.prototype.getSenderAddress = function getSenderAddress () {
+    //     if (this._from) {
+    //         return this._from;
+    //     }
+    //     let pubkey = this.getSenderPublicKey();
+    //     this._from = helper.publicToAddress(pubkey);
+    //     return this._from;
+    // };
 
     /**
      * returns the public key of the sender

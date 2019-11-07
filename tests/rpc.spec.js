@@ -2,9 +2,9 @@
  * rpc.spec.js
  */
 const should = require('should');
-const SymJs =  require ('../index.js');
+import SymJs from '../index.js';
 
-const localRpcHost = "http://112.172.172.60:8001"
+const localRpcHost = "http://localhost:8001"
 
 describe("RPC API Call", function () {
     const symjs = new SymJs();

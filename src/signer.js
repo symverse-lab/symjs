@@ -1,6 +1,6 @@
-const helper = require('./utils/helper');
-const CitizenTx = require('./tx-citizen');
-const SymverseTx = require('./tx-transaction');
+import helper from './utils/helper';
+import CitizenTx from './tx-citizen';
+import SymverseTx from './tx-transaction';
 
 function sign (params, pk) {
     params = helper.paramsToHex(params);

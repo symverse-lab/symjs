@@ -1,3 +1,5 @@
+import Methods from '../methods';
+
 let helper = require('../../utils/helper');
 
 function SctFormat (type, method, params) {
@@ -45,4 +47,4 @@ let sct30 = (function () {
     };
 })();
 
-module.exports = sct30;
+export default  sct30;

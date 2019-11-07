@@ -5,6 +5,8 @@
 
 'use strict';
 
+import Methods from '../rpcapi/methods';
+
 var isBrowser = typeof process === 'undefined' || !process.nextTick || Boolean(process.browser);
 
 var sjcl = require('sjcl');
@@ -22,7 +24,7 @@ function sha3_256(buffer) {
     return sha3.update(buffer).digest();
 }
 
-module.exports = {
+export default  {
 
     version: '1.0.4',
 

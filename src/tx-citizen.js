@@ -1,12 +1,12 @@
 'use strict';
 
-let helper = require('./utils/helper');
+import helper from './utils/helper';
+import BN from 'bn.js';
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 let ethUtil = require('ethereumjs-util');
 let fees = require('ethereum-common/params.json');
-let BN = ethUtil.BN;
 
 // secp256k1n/2
 let N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
@@ -209,14 +209,14 @@ let CitizenTransaction = (function () {
      * @return {Buffer}
      */
 
-    CitizenTransaction.prototype.getSenderAddress = function getSenderAddress () {
-        if (this._from) {
-            return this._from;
-        }
-        let pubkey = this.getSenderPublicKey();
-        this._from = helper.publicToAddress(pubkey);
-        return this._from;
-    };
+    // CitizenTransaction.prototype.getSenderAddress = function getSenderAddress () {
+    //     if (this._from) {
+    //         return this._from;
+    //     }
+    //     let pubkey = this.getSenderPublicKey();
+    //     this._from = helper.publicToAddress(pubkey);
+    //     return this._from;
+    // };
 
     /**
      * returns the public key of the sender

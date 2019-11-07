@@ -2,8 +2,6 @@
 
 let promiseToCallback = require('promise-to-callback');
 
-module.exports = SymRPC;
-
 /**
  * Constructs the SymRPC instance
  *
@@ -16,6 +14,7 @@ function SymRPC (cprovider, options) {
     let self = this;
     let optionsObject = options || {};
 
+    console.log(this, this instanceof SymRPC);
     if (!(this instanceof SymRPC)) {
         throw new Error('the SymRPC object requires the "new" flag in order to function normally (i.e. `const eth = new SymRPC(provider);`).');
     }
@@ -33,7 +32,7 @@ function SymRPC (cprovider, options) {
         self.currentProvider = provider;
     };
     self.setProvider(cprovider);
-}
+};
 
 /**
  * The main send async method
@@ -51,8 +50,8 @@ SymRPC.prototype.sendAsync = function sendAsync (payload, callback) {
     let promise = new Promise(function (resolve, reject) {
         self.currentProvider.sendAsync(parsedPayload, function (err, response) {
             let responseObject = response || {};
-            let payloadErrorMessage
-            let payloadError
+            let payloadErrorMessage;
+            let payloadError;
             if (err) {
                 payloadErrorMessage = String(err);
                 payloadError = new Error(payloadErrorMessage);
@@ -91,3 +90,5 @@ function createPayload (data, id) {
         params: []
     }, data);
 }
+
+export default SymRPC;

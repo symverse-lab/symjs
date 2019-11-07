@@ -1,10 +1,10 @@
-const secp256k1 = require('secp256k1');
-const assert = require('assert');
-const RLP = require('rlp');
-const { SHA3 } = require('sha3');
-const BN = require('bn.js');
-const ethUtil = require('ethereumjs-util');
-const numberToBN = require('number-to-bn');
+import secp256k1 from 'secp256k1';
+import assert from 'assert';
+import { encode, decode } from 'rlp';
+import { SHA3 } from 'sha3';
+import BN from 'bn.js';
+import utf8 from 'utf8';
+import numberToBN from 'number-to-bn';
 
 const _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj; };
 
@@ -25,9 +25,9 @@ const appendHex = (str) => {
     return !isHex(str) ? '0x' + str : str;
 };
 
-const toBN = function (number) {
+const toBN = (number) => {
     try {
-        return numberToBN.apply(null, arguments);
+        return numberToBN(number);
     } catch (e) {
         throw new Error(e + ' Given value: "' + number + '"');
     }
@@ -72,7 +72,7 @@ const numberToHex = (value) => {
     return number.lt(new BN(0)) ? '-0x' + result.substr(1) : '0x' + result;
 };
 
-function paramsToHex (params) {
+const paramsToHex = (params) => {
     for (let i in params) {
         if (Array.isArray(params[i])) {
             for (let j in params[i]) {
@@ -83,23 +83,23 @@ function paramsToHex (params) {
         }
     }
     return params;
-}
+};
 
-const toHex = function (value, returnType) {
+const toHex = (value, returnType) => {
     if (isAddress(value)) {
         return returnType ? 'address' : '0x' + value.toLowerCase().replace(/^0x/i, '');
     }
 
-    if (_.isBoolean(value)) {
+    if (typeof value === 'boolean') {
         return returnType ? 'bool' : value ? '0x01' : '0x00';
     }
 
-    if (_.isObject(value) && !isBigNumber(value) && !isBN(value)) {
+    if (Object.is(value) && !isBigNumber(value) && !isBN(value)) {
         return returnType ? 'string' : utf8ToHex(JSON.stringify(value));
     }
 
     // if its a negative number, pass it through numberToHex
-    if (_.isString(value)) {
+    if (isString(value)) {
         if (value.indexOf('-0x') === 0 || value.indexOf('-0X') === 0) {
             return returnType ? 'int256' : numberToHex(value);
         } else if (value.indexOf('0x') === 0 || value.indexOf('0X') === 0) {
@@ -112,16 +112,20 @@ const toHex = function (value, returnType) {
     return returnType ? (value < 0 ? 'int256' : 'uint256') : numberToHex(value);
 };
 
-const isBigNumber = function (object) {
+const isString = (value) => {
+    return typeof value === 'string' || value instanceof String;
+};
+
+const isBigNumber = (object) => {
     return object && object.constructor && object.constructor.name === 'BigNumber';
 };
 
-const isBN = function (object) {
+const isBN = (object) => {
     return object instanceof BN ||
         (object && object.constructor && object.constructor.name === 'BN');
 };
 
-const isAddress = function (address) {
+const isAddress = (address) => {
     // check if it has the basic requirements of an address
     if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
         return false;
@@ -134,7 +138,7 @@ const isAddress = function (address) {
     }
 };
 
-const checkAddressChecksum = function (address) {
+const checkAddressChecksum = (address) => {
     // Check each case
     address = address.replace(/^0x/i, '');
     var addressHash = sha3(address.toLowerCase()).replace(/^0x/i, '');
@@ -148,7 +152,7 @@ const checkAddressChecksum = function (address) {
     return true;
 };
 
-const utf8ToHex = function (str) {
+const utf8ToHex = (str) => {
     str = utf8.encode(str);
     var hex = '';
 
@@ -167,6 +171,65 @@ const utf8ToHex = function (str) {
     }
 
     return '0x' + hex;
+};
+
+const toBuffer = (v) => {
+    if (!Buffer.isBuffer(v)) {
+        if (Array.isArray(v)) {
+            v = Buffer.from(v);
+        } else if (typeof v === 'string') {
+            if (isHexString(v)) {
+                v = Buffer.from(padToEven(stripHexPrefix(v)), 'hex');
+            } else {
+                v = Buffer.from(v);
+            }
+        } else if (typeof v === 'number') {
+            v = intToBuffer(v);
+        } else if (v === null || v === undefined) {
+            v = Buffer.allocUnsafe(0);
+        } else if (BN.isBN(v)) {
+            v = v.toArrayLike(Buffer);
+        } else if (v.toArray) {
+            // converts a BN to a Buffer
+            v = Buffer.from(v.toArray());
+        } else {
+            throw new Error('invalid type');
+        }
+    }
+    return v;
+};
+
+const intToHex = (i) => {
+    let hex = i.toString(16);
+
+    return '0x' + hex;
+};
+
+const padToEven = (value) => {
+    let a = value; // eslint-disable-line
+    if (typeof a !== 'string') {
+        throw new Error('[ethjs-util] while padding to even, value must be string, is currently ' + typeof a + ', while padToEven.');
+    }
+    if (a.length % 2) {
+        a = '0' + a;
+    }
+
+    return a;
+};
+
+const intToBuffer = (i) => {
+    let hex = intToHex(i);
+    return new Buffer(padToEven(hex.slice(2)), 'hex');
+};
+
+const isHexString = (value, length) => {
+    if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
+        return false;
+    }
+    if (length && value.length !== 2 + 2 * length) {
+        return false;
+    }
+    return true;
 };
 
 const toUnit = (balance, unit, decimal) => {
@@ -210,11 +273,11 @@ const rlphash = (datas) => {
 };
 
 const encodeRlp = (datas) => {
-    return RLP.encode(datas);
+    return encode(datas);
 };
 
 const decodeRlp = (raw) => {
-    return RLP.decode(raw);
+    return decode(raw);
 };
 
 const sha3 = (datas) => {
@@ -222,15 +285,15 @@ const sha3 = (datas) => {
     return hash.update(datas).digest();
 };
 
-const publicToAddress = (pubKey, sanitize) => {
-    pubKey = exports.toBuffer(pubKey);
-    if (sanitize && pubKey.length !== 64) {
-        pubKey = secp256k1.publicKeyConvert(pubKey, false).slice(1);
-    }
-    assert(pubKey.length === 64);
-    // Only take the lower 160bits of the hash
-    return sha3(pubKey).slice(-20);
-};
+// const publicToAddress = (pubKey, sanitize) => {
+//     pubKey = toBuffer(pubKey);
+//     if (sanitize && pubKey.length !== 64) {
+//         pubKey = secp256k1.publicKeyConvert(pubKey, false).slice(1);
+//     }
+//     assert(pubKey.length === 64);
+//     // Only take the lower 160bits of the hash
+//     return sha3(pubKey).slice(-20);
+// };
 
 /**
  * Defines properties on a `Object`. It make the assumption that underlying data is binary.
@@ -254,11 +317,11 @@ const defineProperties = (self, fields, data) => {
             });
             return obj;
         }
-        return ethUtil.baToJSON(this.raw);
+        return baToJSON(this.raw);
     };
 
     self.serialize = function serialize () {
-        return RLP.encode(self.raw);
+        return encode(self.raw);
     };
 
     fields.forEach(function (field, i) {
@@ -269,15 +332,15 @@ const defineProperties = (self, fields, data) => {
         function setter (v) {
             if (Array.isArray(v)) {
                 for (let i in v) {
-                    v[i] = ethUtil.toBuffer(v[i]);
+                    v[i] = toBuffer(v[i]);
                 }
             } else {
-                v = ethUtil.toBuffer(v);
+                v = toBuffer(v);
                 if (v.toString('hex') === '00' && !field.allowZero) {
                     v = Buffer.allocUnsafe(0);
                 }
                 if (field.allowLess && field.length) {
-                    v = ethUtil.stripZeros(v);
+                    v = stripZeros(v);
                     assert(field.length >= v.length, 'The field ' + field.name + ' must not have more ' + field.length + ' bytes');
                 } else if (!(field.allowZero && v.length === 0) && field.length) {
                     assert(field.length === v.length, 'The field ' + field.name + ' must have byte length of ' + field.length);
@@ -307,10 +370,10 @@ const defineProperties = (self, fields, data) => {
     // if the constuctor is passed data
     if (data) {
         if (typeof data === 'string') {
-            data = Buffer.from(ethUtil.stripHexPrefix(data), 'hex');
+            data = toBuffer(stripHexPrefix(data), 'hex');
         }
         if (Buffer.isBuffer(data)) {
-            data = RLP.decode(data);
+            data = decode(data);
         }
         if (Array.isArray(data)) {
             if (data.length > self._fields.length) {
@@ -318,7 +381,7 @@ const defineProperties = (self, fields, data) => {
             }
             // make sure all the items are buffers
             data.forEach(function (d, i) {
-                self[self._fields[i]] = ethUtil.toBuffer(d);
+                self[self._fields[i]] = toBuffer(d);
             });
         } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
             let keys = Object.keys(data);
@@ -331,6 +394,46 @@ const defineProperties = (self, fields, data) => {
         }
     }
 };
+
+const stripHexPrefix = (str) => {
+    if (typeof str !== 'string') {
+        return str;
+    }
+    return isHexPrefixed(str) ? str.slice(2) : str;
+};
+
+const isHexPrefixed = (str) => {
+    if (typeof str !== 'string') {
+        throw new Error('is currently type ' + (typeof str) + ', while check');
+    }
+    return str.slice(0, 2) === '0x';
+};
+
+const stripZeros = (a) => {
+    a = stripHexPrefix(a);
+    var first = a[0];
+    while (a.length > 0 && first.toString() === '0') {
+        a = a.slice(1);
+        first = a[0];
+    }
+    return a;
+};
+
+const baToJSON = (ba) => {
+    if (Buffer.isBuffer(ba)) {
+        return '0x' + ba.toString('hex');
+    } else if (ba instanceof Array) {
+        var array = [];
+        for (var i = 0; i < ba.length; i++) {
+            array.push(baToJSON(ba[i]));
+        }
+        return array;
+    }
+};
+
+const bufferToInt = (buf) => {
+    return new BN(toBuffer(buf)).toNumber();
+}
 
 export default {
     DEFAULT_BLOCK,
@@ -348,9 +451,14 @@ export default {
     toHug,
     toUnit,
     rlphash,
+    baToJSON,
+    stripZeros,
+    isHexPrefixed,
+    stripHexPrefix,
     sha3,
     encodeRlp,
     decodeRlp,
     defineProperties,
-    publicToAddress
+    //publicToAddress,
+    bufferToInt,
 };

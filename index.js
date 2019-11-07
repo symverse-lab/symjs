@@ -1,15 +1,17 @@
-import SymNetwork from './src/network' ;
+import SymNetwork from './src/network';
 import helper from './src/utils/helper';
-import SymTx from './src/signer';
+import signer from './src/signer';
 import Keystore from './src/keystore/keystore';
 
-let SymJs = () => {
-    this.network = SymNetwork;
-    this.utils = helper;
-    this.sigenr = SymTx;
+class SymJs {
+    constructor () {
+        this.network = SymNetwork;
+        this.utils = helper;
+        this.signer = signer;
+    }
 };
 
-SymJs.keystore = Keystore;
 SymJs.utils = helper;
+SymJs.keystore = Keystore;
 
 export default SymJs;

@@ -10,7 +10,6 @@ var plugins = [], outputFile;
 if (env === 'build' && !isDev) {
     plugins.push(new UglifyJsPlugin());
     outputFile = libraryName + '.min.js';
-    console.log(outputFile)
 } else {
     outputFile = libraryName + '.js';
 }
@@ -22,7 +21,7 @@ module.exports = {
     node: { fs: 'empty' },
     output: {
         filename: outputFile,
-        library: 'symjs',
+        library: 'SymJs',
         libraryTarget: 'umd',
         auxiliaryComment: 'symjs beta version...',
         path: path.resolve(__dirname, 'dist')

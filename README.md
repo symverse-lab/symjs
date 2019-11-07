@@ -39,9 +39,25 @@ symjs.network.connect("http://localhost:8001").then(connectedMessage => {
 There you go, now you can use it:
 ```javascript
 // Return Promise Object By Json RPC   
-sym.network.call.getBalance(address); 
-sym.network.call.clientVersion();
-sym.network.call.sendTransaction(raw, pk);
+symjs.network.call.getBalance(address); 
+symjs.network.call.clientVersion();
+```
+
+-  Make Transaction Raw example:
+```javascript
+let privateKey = "1a43aa399cb2efe186317e0b09f4a7ef88b83cff05089b145709881bf4db3a20"
+let params = {
+    "from":"0x00021000000000010002",
+    "nonce": 210,
+    "gasPrice": 1000000000000,
+    "gasLimit": 41000,
+    "to": "0x00021000000000020002",
+    "value": 5,
+    "workNodes": ["0x00021000000000010002"],
+    "chainId": 7777 //require
+};
+// Return Promise Object By Json RPC   
+symjs.network.call.sendTransaction(params, privateKey);
 ```
 
 -  Citizen api call example: 
@@ -66,16 +82,6 @@ let blockNumber = await sym.network.call.warrant.blockNumber()
 let constract = await sym.network.call.sct.getContract("0x4523ad7875a9c41e9629")
 let account = await sym.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x00021000000000010002")
 ```
-
-#### Keystore Create and Unlock
-```javascript
-// Return Promise Object
-const keystore = await symjs.keystore.create("1234") // input passphrase
-
-// Return Promise Object ( privateKey )
-const privateKey = await symjs.keystore.unlock(keystore, "1234")
-```
-
 
 ## Contact
 <https://www.symverse.com/><br> Please contact us on this page.
