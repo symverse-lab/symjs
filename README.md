@@ -1,5 +1,5 @@
 # Symverse Wallet JavaScript API
-###### It provides json rpc communication interface and development library with symworld, keystore, local rpc.
+###### It provides json rpc communication interface and development library with symverse blockchain, rpc api.
 ###### npm: https://www.npmjs.com/package/symjs
 
 ## Installation
