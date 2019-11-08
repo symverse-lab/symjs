@@ -21,10 +21,10 @@ A minified, browserified file `dist/symjs.js` is included for use in the browser
 ## Usage
 Use the symjs object directly from the global namespace:
 ```javascript
-console(SymJs)  // {keystore: ..., utils: ...} 
+console.log(SymJs)  // { utils: ...} 
 
 const symjs = new SymJs();
-console.log(symjs); // {network: ..., keystore: .., utils: ..., signer: ...} 
+console.log(symjs); // {network: ..., utils: ..., signer: ...} 
 ````
 Network connect(`symverse rpc`)
 ```javascript
@@ -97,33 +97,23 @@ symjs.network.call.sendTransaction(params, privateKey);
 
 ```javascript
 // Return Promise Object By Json RPC   
-let citizenInfo = await sym.network.call.citizen.getCitizenBySymID("0x00021000000000010002")
-let count = await sym.network.call.citizen.getCitizenCount()
+let citizenInfo = await symjs.network.call.citizen.getCitizenBySymID("0x00021000000000010002")
+let count = await symjs.network.call.citizen.getCitizenCount()
 ```
 
 -  Warrant api call example: 
 
 ```javascript
 // Return Promise Object By Json RPC   
-let blockNumber = await sym.network.call.warrant.blockNumber()
+let blockNumber = await symjs.network.call.warrant.blockNumber()
 ```
 
 -  Sct api call example: 
 
 ```javascript
 // Return Promise Object By Json RPC   
-let constract = await sym.network.call.sct.getContract("0x4523ad7875a9c41e9629")
-let account = await sym.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x00021000000000010002")
-```
-
-### Keystore Create and Unlock
-
-```javascript
-// Return Promise Object
-const keystore = await symjs.keystore.create("1234") // input passphrase
-
-// Return Promise Object ( privateKey )
-const privateKey = await symjs.keystore.unlock(keystore, "1234")
+let constract = await symjs.network.call.sct.getContract("0x4523ad7875a9c41e9629")
+let account = await symjs.network.call.sct.getContractAccount("0x4523ad7875a9c41e9629", "0x00021000000000010002")
 ```
 
 
