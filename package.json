@@ -4,7 +4,7 @@
     "symjs",
     "blockchain"
   ],
-  "license": "LGPL-3.0",
+  "license": "MPL-2.0",
   "main": "index.js",
   "name": "symjs",
   "scripts": {
@@ -13,7 +13,7 @@
     "build_dev": "WEBPACK_ENV=build webpack --development",
     "test": "mocha $(find ./tests -name '*.spec.js') --require @babel/register --recursive -w "
   },
-  "version": "1.2.9-beta",
+  "version": "1.0.0",
   "author": {
     "name": "gocheat",
     "email": "itsinil@gmail.com"
