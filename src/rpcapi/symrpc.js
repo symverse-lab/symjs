@@ -14,7 +14,6 @@ function SymRPC (cprovider, options) {
     let self = this;
     let optionsObject = options || {};
 
-    console.log(this, this instanceof SymRPC);
     if (!(this instanceof SymRPC)) {
         throw new Error('the SymRPC object requires the "new" flag in order to function normally (i.e. `const eth = new SymRPC(provider);`).');
     }

@@ -1,9 +1,9 @@
-import secp256k1 from 'secp256k1';
 import assert from 'assert';
 import { encode, decode } from 'rlp';
 import { SHA3 } from 'sha3';
 import BN from 'bn.js';
 import utf8 from 'utf8';
+import secp256k1 from 'secp256k1';
 import numberToBN from 'number-to-bn';
 
 const _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj; };
@@ -264,6 +264,27 @@ const toUnit = (balance, unit, decimal) => {
     return Math.floor(balance / Math.pow(10, pow) * (Math.pow(10, decimal))) / (Math.pow(10, decimal));
 };
 
+const ecrecover = (msgHash, v, r, s) => {
+    let signature = Buffer.concat([exports.setLength(r, 32), exports.setLength(s, 32)], 64);
+    var recovery = v;
+    if (recovery !== 0 && recovery !== 1) {
+        throw new Error('Invalid signature v value');
+    }
+    var senderPubKey = secp256k1.recover(msgHash, signature, recovery);
+    return secp256k1.publicKeyConvert(senderPubKey, false).slice(1);
+};
+
+const ecsign = (msgHash, privateKey) => {
+    var sig = secp256k1.sign(msgHash, privateKey);
+    var recovery = sig.recovery;
+    var ret = {
+        r: sig.signature.slice(0, 32),
+        s: sig.signature.slice(32, 64),
+        v: recovery,
+    };
+    return ret;
+};
+
 const toHug = (balance) => {
     return balance * Math.pow(10, 18);
 };
@@ -459,6 +480,7 @@ export default {
     encodeRlp,
     decodeRlp,
     defineProperties,
-    //publicToAddress,
     bufferToInt,
+    ecrecover,
+    ecsign
 };

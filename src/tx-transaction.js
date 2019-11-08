@@ -1,12 +1,11 @@
 'use strict';
 
 import helper from './utils/helper';
+import BN from 'bn.js';
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-let ethUtil = require('ethereumjs-util');
-let fees = require('ethereum-common/params.json');
-let BN = ethUtil.BN;
+let fees = require('./utils/params.json');
 
 // secp256k1n/2
 let N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
@@ -238,8 +237,8 @@ let Transaction = (function () {
             return false;
         }
         try {
-            let v = ethUtil.bufferToInt(this.v);
-            this._senderPubKey = ethUtil.ecrecover(msgHash, v, this.r, this.s);
+            let v = helper.bufferToInt(this.v);
+            this._senderPubKey = helper.ecrecover(msgHash, v, this.r, this.s);
         } catch (e) {
             return false;
         }
@@ -253,8 +252,7 @@ let Transaction = (function () {
 
     Transaction.prototype.sign = function sign (privateKey) {
         let msgHash = this.hash(false);
-        let sig = ethUtil.ecsign(msgHash, privateKey);
-        sig.v = sig.v - 27;
+        let sig = helper.ecsign(msgHash, privateKey);
         Object.assign(this, sig);
     };
 

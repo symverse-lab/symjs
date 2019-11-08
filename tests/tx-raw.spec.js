@@ -31,7 +31,7 @@ describe('Transaction raw Test Cases', function () {
         //tx 데이터 작성
         let params = {
             from: "0x00021000000000010002",
-            nonce: 214,
+            nonce: 216,
             gasPrice: '0x09184e72a000000',
             gasLimit: '0x271000',
             workNodes: ["0x00021000000000010002"],

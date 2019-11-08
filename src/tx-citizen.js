@@ -5,8 +5,7 @@ import BN from 'bn.js';
 
 function _classCallCheck (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-let ethUtil = require('ethereumjs-util');
-let fees = require('ethereum-common/params.json');
+let fees = require('./utils/params.json');
 
 // secp256k1n/2
 let N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
@@ -148,7 +147,7 @@ let CitizenTransaction = (function () {
         });
 
         // calculate chainId from signature
-        let sigV = ethUtil.bufferToInt(this.v);
+        let sigV = helper.bufferToInt(this.v);
         let chainId = sigV;
         if (chainId < 0) chainId = 0;
 
@@ -209,14 +208,9 @@ let CitizenTransaction = (function () {
      * @return {Buffer}
      */
 
-    // CitizenTransaction.prototype.getSenderAddress = function getSenderAddress () {
-    //     if (this._from) {
-    //         return this._from;
-    //     }
-    //     let pubkey = this.getSenderPublicKey();
-    //     this._from = helper.publicToAddress(pubkey);
-    //     return this._from;
-    // };
+    CitizenTransaction.prototype.getSenderAddress = function getSenderAddress () {
+        return this._from;
+    };
 
     /**
      * returns the public key of the sender
@@ -241,13 +235,11 @@ let CitizenTransaction = (function () {
         if (this._homestead && new BN(this.s).cmp(N_DIV_2) === 1) {
             return false;
         }
-
         try {
-            let v = ethUtil.bufferToInt(this.v);
+            let v = helper.bufferToInt(this.v);
             if (this._chainId > 0) {
-                v -= this._chainId * 2 + 8;
             }
-            this._senderPubKey = ethUtil.ecrecover(msgHash, v, this.r, this.s);
+            this._senderPubKey = helper.ecrecover(msgHash, v, this.r, this.s);
         } catch (e) {
             return false;
         }
@@ -262,8 +254,7 @@ let CitizenTransaction = (function () {
 
     CitizenTransaction.prototype.sign = function sign (privateKey) {
         let msgHash = this.hash(false);
-        let sig = ethUtil.ecsign(msgHash, privateKey);
-        sig.v = sig.v - 27;
+        let sig = helper.ecsign(msgHash, privateKey);
         Object.assign(this, sig);
     };
 

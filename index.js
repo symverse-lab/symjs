@@ -1,7 +1,6 @@
 import SymNetwork from './src/network';
 import helper from './src/utils/helper';
 import signer from './src/signer';
-import Keystore from './src/keystore/keystore';
 import sct from './src/rpcapi/sct';
 
 class SymJs {
@@ -14,7 +13,6 @@ class SymJs {
 };
 
 SymJs.utils = helper;
-SymJs.keystore = Keystore;
 SymJs.param = sct;
 
 export default SymJs;
