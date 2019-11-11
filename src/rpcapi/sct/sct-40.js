@@ -20,19 +20,15 @@ let sct40 = (function () {
         create: function (name, symbol, TotalCPoint, ownerSymId) {
             return new SctFormat(type, 0, [name, symbol, TotalCPoint, ownerSymId]);
         },
-
         createItem: function (items) {
             return new SctFormat(type, 1, items);
         },
-
         transfer: function (to, index) {
             return new SctFormat(type, 2, [to, index]);
         },
-
         transferFrom: function (from, to, index) {
             return new SctFormat(type, 3, [from, to, index]);
         },
-
         approve: function (to, index) {
             return new SctFormat(type, 4, [to, index]);
         },

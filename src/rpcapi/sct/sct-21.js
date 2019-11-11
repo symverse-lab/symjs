@@ -15,30 +15,24 @@ let sct21 = (function () {
     let type = 21;
 
     return {
-        create: function (name, symbol, totalSupply,TotalLockSupply, ownerSymId) {
+        create: function (name, symbol, totalSupply, TotalLockSupply, ownerSymId) {
             return new SctFormat(type, 0, [name, symbol, totalSupply, TotalLockSupply, ownerSymId]);
         },
-
         transfer: function (to, amount) {
             return new SctFormat(type, 1, [to, amount]);
         },
-
         transferFrom: function (from, to, amount) {
             return new SctFormat(type, 2, [from, to, amount]);
         },
-
         approve: function (to, amount) {
             return new SctFormat(type, 3, [to, amount]);
         },
-
         decreaseApprove: function (to, amount) {
             return new SctFormat(type, 4, [to, amount]);
         },
-
         mint: function (to, amount) {
             return new SctFormat(type, 5, [to, amount]);
         },
-
         burn: function (to, amount) {
             return new SctFormat(type, 6, [to, amount]);
         },
@@ -71,7 +65,7 @@ let sct21 = (function () {
         },
         AccountUnLock: function (to, amount) {
             return new SctFormat(type, 16, [amount]);
-        },
+        }
     };
 })();
 

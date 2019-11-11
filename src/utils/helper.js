@@ -280,7 +280,7 @@ const ecsign = (msgHash, privateKey) => {
     var ret = {
         r: sig.signature.slice(0, 32),
         s: sig.signature.slice(32, 64),
-        v: recovery,
+        v: recovery
     };
     return ret;
 };
@@ -454,7 +454,7 @@ const baToJSON = (ba) => {
 
 const bufferToInt = (buf) => {
     return new BN(toBuffer(buf)).toNumber();
-}
+};
 
 export default {
     DEFAULT_BLOCK,

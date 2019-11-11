@@ -10,48 +10,6 @@ let fees = require('./utils/params.json');
 // secp256k1n/2
 let N_DIV_2 = new BN('7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0', 16);
 
-/**
- * Creates a new transaction object.
- *
- * @example
- * let rawTx = {
- *   nonce: '00',
- *   gasPrice: '09184e72a000',
- *   gasLimit: '2710',
- *   to: '0000000000000000000000000000000000000000',
- *   value: '00',
- *   data: '7f7465737432000000000000000000000000000000000000000000000000000000600057',
- *   v: '1c',
- *   r: '5e1d3a76fbf824220eafc8c79ad578ad2b67d01b0c2425eb1f1347e8f50882ab',
- *   s: '5bd428537f05f9830e93792f90ea6a3e2d1ee84952dd96edbae9f658f831ab13'
- * };
- * let tx = new Transaction(rawTx);
- *
- * @class
- * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the exmple.
- *
- * Or lastly an Object containing the Properties of the transaction like in the Usage example.
- *
- * For Object and Arrays each of the elements can either be a Buffer, a hex-prefixed (0x) String , Number, or an object with a toBuffer method such as Bignum
- *
- * @property {Buffer} raw The raw rlp encoded transaction
- * @param {Buffer} data.from nonce number
- * @param {Buffer} data.to transaction gas limit
- * @param {Buffer} data.nonce transaction gas price
- * @param {Buffer} data.symid to the to address
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.pubkeyhash the amount of ether sent
- * @param {Buffer} data.v EC signature parameter
- * @param {Buffer} data.r EC signature parameter
- * @param {Buffer} data.s EC recovery ID
- * @param {Number} data.chainId EIP 155 chainId - mainnet: 1, ropsten: 3
- * */
-
 let CitizenTransaction = (function () {
     function CitizenTransaction (data) {
         _classCallCheck(this, CitizenTransaction);

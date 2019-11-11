@@ -172,31 +172,31 @@ const Methods = function () {
     this.sct = {
         params: SctParams,
         getContract: (contract, blockNumber) => {
-            blockNumber = blockNumber || helper.DEFAULT_BLOCK
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK;
             return _this.rpc(payload(
                 'sct_getContract', [contract, blockNumber]
             ));
         },
         getContractAccount: (contract, symId, blockNumber) => {
-            blockNumber = blockNumber || helper.DEFAULT_BLOCK
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK;
             return _this.rpc(payload(
                 'sct_getContractAccount', [contract, symId, blockNumber]
             ));
         },
         getContractItem: (contract, number, blockNumber) => {
-            blockNumber = blockNumber || helper.DEFAULT_BLOCK
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK;
             return _this.rpc(payload(
                 'sct_getContractItem', [contract, number, blockNumber]
             ));
         },
         getContractItemsByCategory: (contract, groupNumber, blockNumber) => {
-            blockNumber = blockNumber || helper.DEFAULT_BLOCK
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK;
             return _this.rpc(payload(
-                'sct_getContractItemsByCategory', [contract, groupNumber,blockNumber]
+                'sct_getContractItemsByCategory', [contract, groupNumber, blockNumber]
             ));
         },
         getAllowance: (contract, owner, spender, blockNumber) => {
-            blockNumber = blockNumber || helper.DEFAULT_BLOCK
+            blockNumber = blockNumber || helper.DEFAULT_BLOCK;
             return _this.rpc(payload(
                 'sct_getAllowance', [contract, owner, spender, blockNumber]
             ));

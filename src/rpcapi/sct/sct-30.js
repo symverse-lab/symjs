@@ -1,5 +1,3 @@
-import Methods from '../methods';
-
 let helper = require('../../utils/helper');
 
 function SctFormat (type, method, params) {

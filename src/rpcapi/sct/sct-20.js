@@ -18,31 +18,24 @@ let sct20 = (function () {
         create: function (name, symbol, totalSupply, ownerSymId) {
             return new SctFormat(type, 0, [name, symbol, totalSupply, ownerSymId]);
         },
-
         transfer: function (to, amount) {
             return new SctFormat(type, 1, [to, amount]);
         },
-
         transferFrom: function (from, to, amount) {
             return new SctFormat(type, 2, [from, to, amount]);
         },
-
         approve: function (to, amount) {
             return new SctFormat(type, 3, [to, amount]);
         },
-
         decreaseApprove: function (to, amount) {
             return new SctFormat(type, 4, [to, amount]);
         },
-
         mint: function (to, amount) {
             return new SctFormat(type, 5, [to, amount]);
         },
-
         burn: function (to, amount) {
             return new SctFormat(type, 6, [to, amount]);
         },
-
         pause: function () {
             return new SctFormat(type, 7, []);
         },
